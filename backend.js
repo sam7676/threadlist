@@ -1,9 +1,13 @@
 const express = require("express");
 const path = require('node:path'); 
 const fspromise = require('fs/promises');
+const favicon = require('serve-favicon')
 
 const app = express();
 const port = 3000;
+
+app.use(express.static('static'));
+app.use(favicon(path.join(__dirname, 'static', 'favicon.ico')))
 
 // Converts the number of threads to the number of pages that represents it
 function thread_count_to_page_count(num) {
@@ -15,14 +19,11 @@ function thread_count_to_page_count(num) {
   }
 }
 
-// Function that 
+// Function that provides lookups for a dictionary and also provides a default
 function dict_get(object, key, default_value) {
   var result = object[key];
   return (typeof result !== "undefined") ? result : default_value;
 }
-
-
-
 
 // Returns the home page
 app.get("/", function (req, res) {
