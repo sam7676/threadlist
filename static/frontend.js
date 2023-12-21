@@ -3,6 +3,7 @@
     var max_page = 1;
 
     update_form_max();
+    update_thread_display();
 
     document.getElementById("get-threads").addEventListener("click", update_thread_display);
     document.getElementById("backthread").addEventListener("click", decrement_form_page);
@@ -33,6 +34,36 @@
         max_page = document.getElementById("maxpage").innerHTML
     }
 
+
+    function update_table(data) {
+        var data_arr = []
+        for(var i in data) {
+            var temp_arr = []
+            for (var j in data[i]) {
+                temp_arr.push(data[i][j])
+            }
+            data_arr.push(temp_arr);
+        }
+
+        console.log(data_arr)
+
+        table = document.getElementById("thread-table")
+
+        var rows = table.rows;
+        console.log(rows.length)
+        for (let i = 0; i < rows.length; i++) {
+
+            rows[i].cells[0].innerHTML = data_arr[i][1]
+            rows[i].cells[1].innerHTML = data_arr[i][0]
+            rows[i].cells[2].innerHTML = data_arr[i][3]
+            rows[i].cells[3].innerHTML = data_arr[i][4]
+            rows[i].cells[4].innerHTML = data_arr[i][5]
+
+
+        }
+
+    }
+
     // Updates which threads are currently shown to the user
     function update_thread_display() {
         var select_option = document.getElementById("sortby")
@@ -51,8 +82,7 @@
 
             )
             .then(
-                (json =>
-                    console.log(json))
+                (json => update_table(json))
             )
 
 

@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require('node:path'); 
 const fspromise = require('fs/promises');
+const fs = require('fs')
 const favicon = require('serve-favicon')
 
 const app = express();
@@ -23,6 +24,26 @@ function thread_count_to_page_count(num) {
 function dict_get(object, key, default_value) {
   var result = object[key];
   return (typeof result !== "undefined") ? result : default_value;
+}
+
+// Comparator for sorting based on likes
+function compareLikes(a, b) {
+  if (a[4] === b[4]) {
+      return 0;
+  }
+  else {
+      return (a[4] < b[4]) ? -1 : 1;
+  }
+}
+
+// Comparator for sorting based on comments
+function compareComments(a, b) {
+  if (a[5] === b[5]) {
+      return 0;
+  }
+  else {
+      return (a[5] < b[5]) ? -1 : 1;
+  }
 }
 
 // Returns the home page
@@ -60,25 +81,41 @@ app.get("/threads", function (req, res) {
   var search = dict_get(req.query, "search", "");
   var page = parseInt(dict_get(req.query, "page", '1'));
 
-  console.log(select);
-  console.log(search);
-  console.log(page);
+  fspromise.readFile(fp)
+    .then((data) => {
+      var files = JSON.parse(data.toString());
+      thread_arr = files["threads"]
+      
+      var arr = []
+      for (let i = 0; i < thread_arr.length; i++) {
+        if (thread_arr[i]["title"].includes(search)) {
+          arr.push([thread_arr[i]["id"], thread_arr[i]["title"], thread_arr[i]["body"], thread_arr[i]["date"],
+                    thread_arr[i]["likes"], thread_arr[i]["comments"]])
+        }
+      } 
 
 
-  // fs.readFile(fp)
-  //   .then((data) => {
-  //     var files = JSON.parse(data.toString());
-  //     thread_count = files["threads"].length
-  //     page_count = thread_count_to_page_count(thread_count)
-  //     res.send({'page_count': page_count})
-  //   })
-  //   .catch((error) => {
-  //     console.log("Error")
-  //     res.send({})
-  //   });
+      if (select == 'likes') {
+        arr.sort(compareLikes);
+      }
+      else if (select == 'comments') {
+        arr.sort(compareComments);
+      }
 
-  res.send({})
+      var start = (page - 1) * 5
+      var end = Math.min(page * 5, arr.length)
 
+      items = arr.slice(start, end)
+      while (items.length < 5) {
+        items.push(['_', '_', '_', '_', '_', '_'])
+      }
+
+      res.send(JSON.stringify(items))
+    })
+    .catch((error) => {
+      console.log("Error")
+      res.send({})
+    });
 
 
 })
