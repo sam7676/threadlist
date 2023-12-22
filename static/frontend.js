@@ -1,6 +1,7 @@
 // Initialising the page and adding listeners
 var form_page = 1;
 var max_page = 1;
+var selected_thread = null;
 
 update_form_max();
 update_thread_display();
@@ -45,8 +46,7 @@ function update_table(data) {
         data_arr.push(temp_arr);
     }
 
-
-    table = document.getElementById("thread-table")
+    var table = document.getElementById("thread-table")
 
     var rows = table.rows;
     for (let i = 0; i < rows.length; i++) {
@@ -90,16 +90,31 @@ async function get_page_count() {
     document.getElementById("maxpage").innerHTML = json_obj["page_count"]
 }
 
+function select_row(row) {
+    var rowID = 'row'.concat(row.toString())
+    var row_element = document.getElementById(rowID)
+    selected_thread = row_element.cells[1].innerHTML;
+    view_thread()
+}
+
 // Creates a new thread and loads the new thread HTML document
 function show_new_thread() {
     var frame = document.getElementById("extra-content");
     frame.src = './new-thread.html';
 }
 
+function view_thread() {
+    var frame = document.getElementById("extra-content");
+    frame.src = './view-thread.html';
+}
+
 // Clears the extra content frame
 function close_frame() {
-
     var frame = document.getElementById("extra-content")
     frame.src = 'about:blank'
+    selected_thread = null;
 
 }
+
+
+
