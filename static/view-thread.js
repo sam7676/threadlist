@@ -2,9 +2,16 @@ var thread_id = window.parent.selected_thread
 
 close_element = document.getElementById("close")
 delete_thread_button = document.getElementById("delete-thread")
+like_thread_button = document.getElementById("like-thread")
+dislike_thread_button = document.getElementById("dislike-thread")
+
+
 
 close_element.addEventListener("click", close_doc);
 delete_thread_button.addEventListener("click", delete_thread);
+like_thread_button.addEventListener("click", like_thread);
+dislike_thread_button.addEventListener("click", dislike_thread);
+
 
 var thread_title = ''
 var thread_body = ''
@@ -55,9 +62,40 @@ async function delete_thread() {
 
 }
 
+async function like_thread() {
+    update_thread_likes(1);
+    thread_likes = thread_likes + 1;
+    document.getElementById("thread-likes").innerHTML = thread_likes
+}
+
+async function dislike_thread() {
+    update_thread_likes(-1);
+    thread_likes = thread_likes - 1;
+    document.getElementById("thread-likes").innerHTML = thread_likes
+}
+
+async function update_thread_likes(val) {
+    promise = await fetch("./likethread",
+        {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify({
+                "thread-id": thread_id,
+                "like-number": val,
+            })
+        })
+    
+    window.parent.update_thread_display()
+
+}
+
 
 function close_doc() {
     delete_thread_button.removeEventListener("click", delete_thread, true);
     close_element.removeEventListener("click", close_doc, true);
+    like_thread_button.removeEventListener("click", like_thread, true);
+    dislike_thread_button.removeEventListener("click", dislike_thread, true);
     window.parent.close_frame()
 }

@@ -307,6 +307,31 @@ app.post("/deletethread", function (req, res) {
 
 });
 
+app.post("/likethread", function (req, res) {
+  var thread_id = req.body["thread-id"]
+  var like_number = req.body["like-number"]
+
+  var fp = 'thread_db.json'
+  var data = fs.readFileSync(fp);
+  var jsonData = JSON.parse(data)
+
+  var ind = -1
+  for (var i=0; i < jsonData.threads.length; i++) {
+    if (jsonData.threads[i]["id"] == thread_id) {
+      ind = i;
+    }
+  }
+
+  jsonData.threads[ind]["likes"] += like_number;
+
+  fs.writeFileSync(fp, JSON.stringify(jsonData));
+
+  res.json({})
+
+});
+
+
+app.post("")
 
 app.listen(port, function () {
   console.log(`http://127.0.0.1:${port}/`)

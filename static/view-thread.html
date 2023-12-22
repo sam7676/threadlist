@@ -5,13 +5,19 @@
 </head>
 
 <body>
-    <label id="thread-title"></label> <label id="thread-num"></label>
+    <label id="thread-title"></label> <label id="thread-num"></label> <input type="Button" id="close" value="X">
     <br><label id="thread-body"></label>
     <br><label id="thread-date"></label>
     <input type="Button" id="delete-thread" value="Delete">
-    <br><label id="thread-likes"></label>
+    <br>
+    <input type="Button" id="dislike-thread" value="-">
+    Likes: 
+    <label id="thread-likes"></label>
+    <input type="Button" id="like-thread" value="+"><br>
+
+
     <label id="thread-comments"></label>
 
-    <input type="Button" id="close" value="X">
+    
 </body>
 <script type="text/javascript" src="./view-thread.js"></script>
