@@ -2,3 +2,8 @@
     font-family: monospace;
 
 }
+
+#extra-content {
+    border: 0;
+    width: 100%;
+}
