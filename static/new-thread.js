@@ -17,16 +17,16 @@ async function submit_thread() {
     body_box.value = ''
 
     promise = await fetch("./createnewthread",
-    {
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        method: "POST",
-        body: JSON.stringify({
-            "title": thread_title,
-            "body": thread_body
+        {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify({
+                "title": thread_title,
+                "body": thread_body
+            })
         })
-    })
 
 
     await window.parent.update_thread_display()
@@ -39,7 +39,7 @@ async function submit_thread() {
 
 // Closes the iFrame
 function close_doc() {
-    
+
     submit_thread_element.removeEventListener("click", submit_thread, true); // Succeeds
     close_element.removeEventListener("click", close_doc, true);
     window.parent.close_frame()

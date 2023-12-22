@@ -75,7 +75,7 @@ async function update_thread_display() {
         'search': search_item,
         'page': form_page,
     }), { method: "GET" })
-    
+
 
     result_json = await promise.json()
     update_table(result_json)
