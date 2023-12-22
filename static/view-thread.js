@@ -1,6 +1,10 @@
 var thread_id = window.parent.selected_thread
+
 close_element = document.getElementById("close")
+delete_thread_button = document.getElementById("delete-thread")
+
 close_element.addEventListener("click", close_doc);
+delete_thread_button.addEventListener("click", delete_thread);
 
 var thread_title = ''
 var thread_body = ''
@@ -34,9 +38,26 @@ async function get_thread_info() {
 
 }
 
+async function delete_thread() {
+    promise = await fetch("./deletethread",
+        {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify({
+                "thread-id": thread_id,
+            })
+        })
+    
+    await window.parent.update_thread_display()
+    close_doc();
+
+}
+
 
 function close_doc() {
-    
+    delete_thread_button.removeEventListener("click", delete_thread, true);
     close_element.removeEventListener("click", close_doc, true);
     window.parent.close_frame()
 }

@@ -227,7 +227,7 @@ app.get("/threadinfo", function (req, res) {
       var files = JSON.parse(data.toString())
       thread_arr = files["threads"]
       chosen_thread = {}
-      for (var i=0; i < thread_arr.length; i++) {
+      for (var i = 0; i < thread_arr.length; i++) {
         if (thread_arr[i]["id"] == thread_id) {
           res.send(thread_arr[i])
         }
@@ -283,6 +283,30 @@ app.post("/createnewthread", function (req, res) {
   res.json({})
 
 });
+
+app.post("/deletethread", function (req, res) {
+  var thread_deletion_id = req.body["thread-id"]
+
+  var fp = 'thread_db.json'
+  var data = fs.readFileSync(fp);
+  var jsonData = JSON.parse(data)
+  var thread_data = jsonData["threads"]
+
+  var ind_to_delete = -1
+
+  for (var i=0; i < thread_data.length; i++) {
+    if (thread_data[i]["id"] == thread_deletion_id) {
+      ind_to_delete = i;
+    }
+  }
+  jsonData.threads.splice(ind_to_delete, 1);
+
+  fs.writeFileSync(fp, JSON.stringify(jsonData));
+
+  res.json({})
+
+});
+
 
 app.listen(port, function () {
   console.log(`http://127.0.0.1:${port}/`)
