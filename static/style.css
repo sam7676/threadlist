@@ -7,3 +7,15 @@
     border: 0;
     width: 100%;
 }
+
+#thread-table {
+    border: 1px solid black;
+    border-collapse: collapse;
+    user-select: none;  
+}
+
+tr {
+    background-color: #96D4D4;
+    
+  }
+
