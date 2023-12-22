@@ -146,10 +146,9 @@ app.get("/", function (req, res) {
 });
 
 // Returns the number of thread pages available to view
-app.get("/getpagecount", function (req, res) {
+app.get("/getpagecount", async function (req, res) {
   var thread_count = 0;
   var page_count = 0
-
   var fp = 'thread_db.json'
 
   // Reads the thread_db file and returns the number of pages
@@ -168,7 +167,7 @@ app.get("/getpagecount", function (req, res) {
 });
 
 // Returns the five threads that satisfy the user's request
-app.get("/threads", function (req, res) {
+app.get("/threads", async function (req, res) {
   var fp = 'thread_db.json';
   var select = dict_get(req.query, "select", "date-newest");
   var search = dict_get(req.query, "search", "");
@@ -219,6 +218,22 @@ app.get("/threads", function (req, res) {
 
 
 })
+
+app.get("/threadinfo", function (req, res) {
+  var fp = 'thread_db.json';
+  var thread_id = req.query["id"]
+  fspromise.readFile(fp)
+    .then((data) => {
+      var files = JSON.parse(data.toString())
+      thread_arr = files["threads"]
+      chosen_thread = {}
+      for (var i=0; i < thread_arr.length; i++) {
+        if (thread_arr[i]["id"] == thread_id) {
+          res.send(thread_arr[i])
+        }
+      }
+    })
+});
 
 app.post("/createnewthread", function (req, res) {
 
