@@ -22,15 +22,10 @@ element_next_comment_page.addEventListener("click", increment_form_comment_page)
 element_submit_comment_button.addEventListener("click", submit_comment);
 
 
-var thread_title = ''
-var thread_body = ''
-var thread_date = ''
 var thread_likes = 0
-var thread_comments = 0
 
 
 document.getElementById("thread-num").innerHTML = thread_id
-document.getElementById("thread-id-upload").value = thread_id
 
 get_thread_info()
 update_comment_form_max();
@@ -44,17 +39,13 @@ async function get_thread_info() {
     }), { method: "GET" })
 
     var result = await promise.json()
-    thread_title = result["title"]
-    thread_body = result["body"]
-    thread_date = result["date"]
     thread_likes = result["likes"]
-    thread_comments = result["comments"]
 
-    document.getElementById("thread-title").innerHTML = thread_title
-    document.getElementById("thread-body").innerHTML = thread_body
-    document.getElementById("thread-date").innerHTML = thread_date
+    document.getElementById("thread-title").innerHTML = result["title"]
+    document.getElementById("thread-body").innerHTML = result["body"]
+    document.getElementById("thread-date").innerHTML = result["date"]
     document.getElementById("thread-likes").innerHTML = thread_likes
-    document.getElementById("thread-comments").innerHTML = thread_comments
+    document.getElementById("thread-comments").innerHTML = result["comments"]
 
 }
 
@@ -104,8 +95,6 @@ async function update_thread_likes(val) {
 
 }
 
-
-
 // // Increments the thread page we are currently on, and modifies the form_page attribute
 function increment_form_comment_page() {
     if (form_comment_page + 1 <= max_comment_page) {
@@ -139,17 +128,26 @@ function update_comment_table(data) {
         }
         data_arr.push(temp_arr);
     }
+
     for (let i = 0; i < 5; i++) {
         body_element = document.getElementById(`body-comment-${i + 1}`)
         id_element = document.getElementById(`id-comment-${i + 1}`)
         date_element = document.getElementById(`date-comment-${i + 1}`)
         likes_element = document.getElementById(`likes-comment-${i + 1}`)
+        div_element = document.getElementById(`image-div-${i + 1}`)
 
         body_element.innerHTML = data_arr[i][1]
         id_element.innerHTML = data_arr[i][0]
         date_element.innerHTML = data_arr[i][2]
         likes_element.innerHTML = data_arr[i][3]
 
+        
+        if (data_arr[i][5] == '_') {
+            div_element.innerHTML = `<label>${data_arr[i][5]}</label>`
+        }
+        else {
+            div_element.innerHTML = `<img src='${data_arr[i][5]}'>`
+        }
 
         dislike_element = document.getElementById(`dislike-comment-row${i + 1}`)
         like_element = document.getElementById(`like-comment-row${i + 1}`)
@@ -200,29 +198,28 @@ async function get_comment_count() {
     }), { method: "GET" })
 
     json_obj = await promise.json()
+    document.getElementById("thread-comments").innerHTML = json_obj["comment_count"]
     document.getElementById("max-comment-page").innerHTML = json_obj["page_count"]
 }
 
 async function submit_comment() {
 
-    new_comment_element = document.getElementById("new-comment-box")
+    const form = document.getElementById("submit-comment-form")
+    const formData = new FormData(form);
+    formData.append("thread-id",thread_id);
 
-    new_comment = new_comment_element.value
 
-    new_comment_element.value = ''
+    document.getElementById("new-comment-box").value = ''
+    document.getElementById("upload-file").value = ''
+
 
     promise = await fetch("./addcomment",
         {
-            headers: {
-                'Content-Type': 'application/json'
-            },
             method: "POST",
-            body: JSON.stringify({
-                "thread-id": thread_id,
-                "body": new_comment
-            })
+            body: formData
         })
 
+    await console.log("done")
 
     await window.parent.update_thread_display()
     await update_comment_display()
@@ -296,9 +293,15 @@ async function delete_comment(comment_id) {
 }
 
 function close_doc() {
-    element_delete_thread_button.removeEventListener("click", delete_thread, true);
     element_close.removeEventListener("click", close_doc, true);
+    element_delete_thread_button.removeEventListener("click", delete_thread, true);
     element_like_thread_button.removeEventListener("click", like_thread, true);
     element_dislike_thread_button.removeEventListener("click", dislike_thread, true);
+    element_get_comments.removeEventListener("click", update_comment_display, true);
+    element_back_comment_page.removeEventListener("click", decrement_form_comment_page, true);
+    element_next_comment_page.removeEventListener("click", increment_form_comment_page, true);
+    element_submit_comment_button.removeEventListener("click", submit_comment, true);
+
+
     window.parent.close_frame()
 }

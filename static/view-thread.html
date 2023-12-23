@@ -17,7 +17,6 @@
 
 
 
-
     Comments:
     <label id="thread-comments"></label>
 
@@ -32,6 +31,7 @@
             <option value="date-newest">Date posted (newest)</option>
             <option value="date-oldest">Date posted (oldest)</option>
             <option value="likes">Likes</option>
+            <option value="has-image">Has image</option>
         </select>
 
         <label>Filter:</label>
@@ -49,6 +49,7 @@
     <label id="likes-comment-1">d</label>
     <button type="button" id="like-comment-row1" onclick="like_comment(1, 1)">+</button>
     <button type="button" id="delete-comment-row1" onclick="delete_comment_check(1)">X</button>
+    <div id="image-div-1"><label>_</label></div>
     <br>
     <label id="body-comment-2">e</label>
     <label id="id-comment-2">f</label>
@@ -57,6 +58,7 @@
     <label id="likes-comment-2">h</label>
     <button type="button" id="like-comment-row2" onclick="like_comment(2, 1)">+</button>
     <button type="button" id="delete-comment-row2" onclick="delete_comment_check(2)">X</button>
+    <div id="image-div-2"><label>_</label></div>
     <br>
     <label id="body-comment-3">i</label>
     <label id="id-comment-3">j</label>
@@ -65,6 +67,7 @@
     <label id="likes-comment-3">l</label>
     <button type="button" id="like-comment-row3" onclick="like_comment(3, 1)">+</button>
     <button type="button" id="delete-comment-row3" onclick="delete_comment_check(3)">X</button>
+    <div id="image-div-3"><label>_</label></div>
     <br>
     <label id="body-comment-4">m</label>
     <label id="id-comment-4">n</label>
@@ -73,6 +76,7 @@
     <label id="likes-comment-4">p</label>
     <button type="button" id="like-comment-row4" onclick="like_comment(4, 1)">+</button>
     <button type="button" id="delete-comment-row4" onclick="delete_comment_check(4)">X</button>
+    <div id="image-div-4"><label>_</label></div>
     <br>
     <label id="body-comment-5">q</label>
     <label id="id-comment-5">r</label>
@@ -81,11 +85,10 @@
     <label id="likes-comment-5">t</label>
     <button type="button" id="like-comment-row5" onclick="like_comment(5, 1)">+</button>
     <button type="button" id="delete-comment-row5" onclick="delete_comment_check(5)">X</button>
+    <div id="image-div-5"><label>_</label></div>
     <br>
 
     
-
-
     <!-- Buttons to alter the current page -->
     <button type="button" id="back-comment-page">Back</button>
     <label>Page</label>
@@ -96,18 +99,10 @@
     </form>
 
 
-    <!-- New comment option -->
-    <form>
-        <textarea id="new-comment-box" rows="4" cols="50" placeholder="New comment..."></textarea><br>
+    <form enctype="multipart/form-data" id="submit-comment-form">
+        <textarea id="new-comment-box" name="comment-body" rows="4" cols="50" placeholder="New comment..."></textarea><br>
+        <input type="file" id="upload-file" name="file">
         <input type="button" id="submit-comment" value="POST">
-    </form>
-
-    <!-- Upload image option -->
-    <label>Upload image...</label>
-    <form method="post" enctype="multipart/form-data" action="./uploadimage">
-        <input type="file" name="file">
-        <input type="submit" value="Submit">
-        <input type="hidden" name='hidden-thread-id' id="thread-id-upload">
     </form>
     
 
