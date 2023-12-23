@@ -9,7 +9,6 @@ element_back_comment_page = document.getElementById("back-comment-page")
 element_next_comment_page = document.getElementById("next-comment-page")
 element_submit_comment_button = document.getElementById("submit-comment")
 
-
 var form_comment_page = 1;
 var max_comment_page = 1;
 
@@ -31,6 +30,7 @@ var thread_comments = 0
 
 
 document.getElementById("thread-num").innerHTML = thread_id
+document.getElementById("thread-id-upload").value = thread_id
 
 get_thread_info()
 update_comment_form_max();
@@ -69,7 +69,7 @@ async function delete_thread() {
                 "thread-id": thread_id,
             })
         })
-    
+
     await window.parent.update_thread_display()
     close_doc();
 
@@ -99,7 +99,7 @@ async function update_thread_likes(val) {
                 "like-number": val,
             })
         })
-    
+
     window.parent.update_thread_display()
 
 }
@@ -139,11 +139,11 @@ function update_comment_table(data) {
         }
         data_arr.push(temp_arr);
     }
-    for (let i=0; i < 5; i++) {
-        body_element = document.getElementById(`body-comment-${i+1}`)
-        id_element = document.getElementById(`id-comment-${i+1}`)
-        date_element = document.getElementById(`date-comment-${i+1}`)
-        likes_element = document.getElementById(`likes-comment-${i+1}`)
+    for (let i = 0; i < 5; i++) {
+        body_element = document.getElementById(`body-comment-${i + 1}`)
+        id_element = document.getElementById(`id-comment-${i + 1}`)
+        date_element = document.getElementById(`date-comment-${i + 1}`)
+        likes_element = document.getElementById(`likes-comment-${i + 1}`)
 
         body_element.innerHTML = data_arr[i][1]
         id_element.innerHTML = data_arr[i][0]
@@ -151,9 +151,9 @@ function update_comment_table(data) {
         likes_element.innerHTML = data_arr[i][3]
 
 
-        dislike_element = document.getElementById(`dislike-comment-row${i+1}`)
-        like_element = document.getElementById(`like-comment-row${i+1}`)
-        delete_element = document.getElementById(`delete-comment-row${i+1}`)
+        dislike_element = document.getElementById(`dislike-comment-row${i + 1}`)
+        like_element = document.getElementById(`like-comment-row${i + 1}`)
+        delete_element = document.getElementById(`delete-comment-row${i + 1}`)
 
         if (data_arr[i][0] == '_') {
             dislike_element.innerHTML = ''
@@ -226,7 +226,7 @@ async function submit_comment() {
 
     await window.parent.update_thread_display()
     await update_comment_display()
-    
+
 }
 
 async function like_comment(pos, likes) {
@@ -238,7 +238,7 @@ async function like_comment(pos, likes) {
     like_count = parseInt(like_count_element.innerHTML)
 
     await update_comment_likes(comment_id, likes)
-    like_count_element.innerHTML = like_count + likes 
+    like_count_element.innerHTML = like_count + likes
 
 
     await update_comment_display()
@@ -251,7 +251,7 @@ async function delete_comment_check(pos) {
         form_comment_page = form_comment_page - 1
     }
 
-    
+
     comment_id = document.getElementById(`id-comment-${pos}`).innerHTML
     if (comment_id == '_') {
         return;
@@ -281,20 +281,19 @@ async function update_comment_likes(id, val) {
 
 async function delete_comment(comment_id) {
     promise = await fetch("./deletecomment",
-    {
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        method: "POST",
-        body: JSON.stringify({
-            "comment-id": comment_id,
+        {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify({
+                "comment-id": comment_id,
+            })
         })
-    })
 
 
 
 }
-
 
 function close_doc() {
     element_delete_thread_button.removeEventListener("click", delete_thread, true);

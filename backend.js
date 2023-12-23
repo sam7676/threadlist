@@ -3,6 +3,7 @@ const path = require('node:path');
 const fspromise = require('fs/promises');
 const fs = require('fs')
 const favicon = require('serve-favicon')
+const multer = require('multer')
 
 const app = express();
 const port = 8000;
@@ -13,6 +14,7 @@ const date_map = {
   "Oct": 10, "Nov": 11, "Dec": 12
 }
 
+const upload = multer({ dest: 'uploads/' })
 
 const thread_db_fp = 'db\\thread_db.json'
 const thread_id_fp = 'db\\thread_id.json'
@@ -181,6 +183,10 @@ async function open_json_file(filepath) {
   return JSON.parse(promise.toString())
 
 }
+
+
+
+
 
 
 // Returns the home page
@@ -390,7 +396,7 @@ app.post("/addcomment", async function (req, res) {
 
   // Adding 1 comment to thread database
   var threadJsonData = await open_json_file(thread_db_fp)
-  for (var i=0; i < threadJsonData.threads.length; i++) {
+  for (var i = 0; i < threadJsonData.threads.length; i++) {
     if (threadJsonData.threads[i]["id"] == thread_id) {
       threadJsonData.threads[i]["comments"] += 1
     }
@@ -462,7 +468,7 @@ app.post("/deletecomment", async function (req, res) {
 
   // Deleting 1 comment from thread database
   var threadJsonData = await open_json_file(thread_db_fp)
-  for (var i=0; i < threadJsonData.threads.length; i++) {
+  for (var i = 0; i < threadJsonData.threads.length; i++) {
     if (threadJsonData.threads[i]["id"] == parent) {
       threadJsonData.threads[i]["comments"] -= 1
     }
@@ -516,6 +522,32 @@ app.post("/likecomment", async function (req, res) {
 
   res.json({})
 
+});
+
+app.post("/uploadimage", upload.single("file"), async function (req, res) {
+  
+
+  var tempPath = req.file.path;
+  
+  var suffix = path.extname(req.file.originalname).toLowerCase()
+
+  var thread_id = req.body["hidden-thread-id"]
+
+  // Opening the ID database and getting the least-recently used ID. 
+  // This is the equivalent of generating a primary key in a database.
+  var jsonData = await open_json_file(comment_id_fp)
+  var id_int = parseInt(jsonData["id"])
+  var new_id_int = id_int + 1
+  jsonData["id"] = new_id_int
+  fspromise.writeFile(comment_id_fp, JSON.stringify(jsonData));
+  var id_string = int_to_id(id_int);
+
+  var targetPath = path.join(__dirname, `./uploads/${id_string}.png`);
+
+  if (suffix === ".png" || suffix === ".jpg") {
+    promise = await fspromise.rename(tempPath, targetPath)
+  }
+  res.status(200);
 });
 
 

@@ -95,11 +95,21 @@
     <button type="button" id="next-comment-page">Next</button>
     </form>
 
+
+    <!-- New comment option -->
     <form>
         <textarea id="new-comment-box" rows="4" cols="50" placeholder="New comment..."></textarea><br>
         <input type="button" id="submit-comment" value="POST">
     </form>
 
+    <!-- Upload image option -->
+    <label>Upload image...</label>
+    <form method="post" enctype="multipart/form-data" action="./uploadimage">
+        <input type="file" name="file">
+        <input type="submit" value="Submit">
+        <input type="hidden" name='hidden-thread-id' id="thread-id-upload">
+    </form>
+    
 
     
 </body>
