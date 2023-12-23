@@ -60,10 +60,16 @@ function update_table(data) {
 
     }
 
+
 }
 
 // Updates which threads are currently shown to the user
 async function update_thread_display() {
+
+    await get_page_count()
+    if (form_page > max_page) {
+        form_page = form_page - 1;
+    }
 
     var select_option = document.getElementById("sortby")
     var select_value = select_option.options[select_option.selectedIndex].value;
@@ -87,6 +93,7 @@ async function get_page_count() {
 
     promise = await fetch("./getpagecount", { method: "GET" })
     json_obj = await promise.json()
+    max_page = json_obj["page_count"]
     document.getElementById("maxpage").innerHTML = json_obj["page_count"]
 }
 
