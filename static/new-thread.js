@@ -27,15 +27,27 @@ async function submit_thread() {
                 "body": thread_body
             })
         })
+    json_obj = await promise.json()
 
+    if (json_obj["error"] == "length") {
+        alert("Thread title/body length not in range")
+    }
+    else {
+        new_thread_id = json_obj["thread-id"]
+        await window.parent.update_thread_display()
+        post_success(new_thread_id)
+    }
 
-    await window.parent.update_thread_display()
-
-    close_doc()
+   
 
 }
 
-
+function post_success(thread_id) {
+    window.parent.selected_thread = thread_id;
+    submit_thread_element.removeEventListener("click", submit_thread, true); // Succeeds
+    close_element.removeEventListener("click", close_doc, true);
+    window.parent.view_thread();
+}
 
 // Closes the iFrame
 function close_doc() {

@@ -39,6 +39,7 @@ async function get_thread_info() {
     }), { method: "GET" })
 
     var result = await promise.json()
+
     thread_likes = result["likes"]
 
     document.getElementById("thread-title").innerHTML = result["title"]
@@ -219,7 +220,14 @@ async function submit_comment() {
             body: formData
         })
 
-    await console.log("done")
+    json_obj = await promise.json()
+    if (json_obj["error"] == "content") {
+        alert("No body/image provided")
+    }
+    else if (json_obj["error"] == "file") {
+        alert("Filetype not supported")
+    }
+
 
     await window.parent.update_thread_display()
     await update_comment_display()
