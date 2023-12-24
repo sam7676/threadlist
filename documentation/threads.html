@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>/threads</title>
+</head>
+
+<body>
+    <h1>Threads</h1>
+    <div>
+        <p>Returns five threads to be displayed, satisfying the given search conditions.</p>
+    </div>
+    <div>
+        Parameters
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>select</td>
+                <td>string</td>
+                <td>The chosen method to sort the threads by</td>
+            </tr>
+            <tr>
+                <td>search</td>
+                <td>string</td>
+                <td>Returns only threads that contain the given string in their title</td>
+            </tr>
+            <tr>
+                <td>page</td>
+                <td>number</td>
+                <td>Selects five threads based on their index in the sorted array</td>
+            </tr>
+
+        </table>
+    </div>
+
+    <br>
+
+    <div>
+
+
+        <label>Example requests</label><br>
+        <ul>
+            <li>
+                curl -X GET .threads?select=date-newest&search=&page=1/
+            </li>
+        </ul>
+    </div>
+
+    <br>
+
+    <div>
+        <label>Example responses</label><br>
+        <table>
+            <tr>
+                <td>[</td>
+            </tr>
+            <tr>
+                <td>["00000081","g","h","2023-12-24-04-23-06","2023-12-24-04-23-06",0,0]</td>
+            </tr>
+            <tr>
+                <td>["00000080","e","f","2023-12-24-04-23-03","2023-12-24-04-23-03",0,0]</td>
+            </tr>
+            <tr>
+                <td>["00000079","c","d","2023-12-24-04-23-00","2023-12-24-04-23-00",0,0]</td>
+            </tr>
+            <tr>
+                <td>["00000078","a","b","2023-12-24-04-22-57","2023-12-24-04-22-57",0,0]</td>
+            </tr>
+            <tr>
+                <td>["00000077","lol","","2023-12-24-03-42-04","2023-12-24-03-42-04",0,0]</td>
+            </tr>
+
+
+            <tr>
+                <td>]</td>
+            </tr>
+            
+        </table>
+    </div>
+
+    <br>
+
+    <div>
+        Response fields
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>Array</td>
+                <td>Array</td>
+                <td>An array displaying the five threads</td>
+            </tr>
+            <tr>
+                <td>Index zero [0]</td>
+                <td>String</td>
+                <td>The unique ID given for each thread</td>
+            </tr>
+            
+            <tr>
+                <td>Index one [1]</td>
+                <td>String</td>
+                <td>The title of each thread</td>
+            </tr>
+            <tr>
+                <td>Index two [2]</td>
+                <td>String</td>
+                <td>The body for each thread</td>
+            </tr>
+            <tr>
+                <td>Index three [3]</td>
+                <td>String</td>
+                <td>The date the thread was posted, in string format</td>
+            </tr>
+            <tr>
+                <td>Index four [4]</td>
+                <td>String</td>
+                <td>The date the thread was last updated, in string format</td>
+            </tr>
+            <tr>
+                <td>Index five [5]</td>
+                <td>Number</td>
+                <td>The number of likes the thread has</td>
+            </tr>
+            <tr>
+                <td>Index six [6]</td>
+                <td>Number</td>
+                <td>The number of comments the thread has</td>
+            </tr>
+        </table>
+    </div>
+
+    <br>
+    <a href="_api_documentation.html">Back</a>
+
+
+</body>
