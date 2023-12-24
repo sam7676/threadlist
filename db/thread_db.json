@@ -1,1 +1,22 @@
-{"threads":[{"id":"00000076","title":"working finally?","body":"hopefully this is it and i can work on UI tmrw","date":"2023-12-24-03-30-56","lastupdate":"2023-12-24-03-42-13","likes":1,"comments":7},{"id":"00000077","title":"lol","body":"","date":"2023-12-24-03-42-04","lastupdate":"2023-12-24-03-42-04","likes":0,"comments":0}]}
+{
+    "threads": [
+        {
+            "id": "00000076",
+            "title": "working finally?",
+            "body": "hopefully this is it and i can work on UI tmrw",
+            "date": "2023-12-24-03-30-56",
+            "lastupdate": "2023-12-24-03-42-13",
+            "likes": 1,
+            "comments": 7
+        },
+        {
+            "id": "00000077",
+            "title": "lol",
+            "body": "",
+            "date": "2023-12-24-03-42-04",
+            "lastupdate": "2023-12-24-03-42-04",
+            "likes": 0,
+            "comments": 0
+        }
+    ]
+}
