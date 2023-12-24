@@ -56,8 +56,7 @@ function update_table(data) {
         rows[i].cells[2].innerHTML = data_arr[i][3]
         rows[i].cells[3].innerHTML = data_arr[i][4]
         rows[i].cells[4].innerHTML = data_arr[i][5]
-
-
+        rows[i].cells[5].innerHTML = data_arr[i][6]
     }
 
 
@@ -101,7 +100,12 @@ function select_row(row) {
     var rowID = 'row'.concat(row.toString())
     var row_element = document.getElementById(rowID)
     selected_thread = row_element.cells[1].innerHTML;
-    view_thread()
+    if (selected_thread == '_') {
+        alert("Cannot select invalid thread")
+    }
+    else {
+        view_thread()
+    }
 }
 
 // Creates a new thread and loads the new thread HTML document

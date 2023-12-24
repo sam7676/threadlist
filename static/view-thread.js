@@ -45,6 +45,7 @@ async function get_thread_info() {
     document.getElementById("thread-title").innerHTML = result["title"]
     document.getElementById("thread-body").innerHTML = result["body"]
     document.getElementById("thread-date").innerHTML = result["date"]
+    document.getElementById("thread-last-update").innerHTML = result["lastupdate"]
     document.getElementById("thread-likes").innerHTML = thread_likes
     document.getElementById("thread-comments").innerHTML = result["comments"]
 
@@ -228,8 +229,9 @@ async function submit_comment() {
         alert("Filetype not supported")
     }
 
-
+    get_last_thread_update()
     await window.parent.update_thread_display()
+
     await update_comment_display()
 
 }
@@ -299,6 +301,16 @@ async function delete_comment(comment_id) {
 
 
 }
+
+async function get_last_thread_update() {
+    var promise = await fetch("./getlastupdate?" + new URLSearchParams({
+        'thread-id': thread_id,
+    }), { method: "GET" })
+
+    json_obj = await promise.json()
+    document.getElementById("thread-last-update").innerHTML = json_obj["last_update"]
+}
+
 
 function close_doc() {
     element_close.removeEventListener("click", close_doc, true);

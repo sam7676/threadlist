@@ -28,10 +28,18 @@ const THREAD_MAX_BODY_LENGTH = 4000
 const COMMENT_MIN_LENGTH = 0
 const COMMENT_MAX_LENGTH = 4000
 
+const THREAD_LIKES_INDEX = 5
+const THREAD_COMMENTS_INDEX = 6
+const THREAD_DATES_INDEX = 3
+const THREAD_UPDATE_INDEX = 4
+const COMMENT_LIKES_INDEX = 3
+const COMMENT_DATES_INDEX = 2
+const COMMENT_IMAGE_INDEX = 5
+
 const STRING_TYPE = "string"
 const NUMBER_TYPE = "number"
 const UNDEFINED_TYPE = "undefined"
-const thread_select_set = new Set(['date-newest', 'date-oldest', 'likes', 'comments'])
+const thread_select_set = new Set(['date-newest', 'date-oldest', 'last-update', 'likes', 'comments'])
 const comment_select_set = new Set(['date-newest', 'date-oldest', 'likes', 'has-image'])
 
 app.use(express.static('static'));
@@ -101,27 +109,28 @@ function dict_get(object, key, default_value) {
   return (typeof result !== "undefined") ? result : default_value;
 }
 // Comparators for sorting threads
-// Error handling is ignored, as we will always assume our thread database is in the form [id, title, body, date, likes, comments]
+// Error handling is ignored, as we will always assume our thread database is in the form 
+// [id, title, body, date, lastupdate, likes, comments]
 // and our comment database is in the form [id, body, date, likes, parent, image]
 function t_compareLikes(a, b) {
-  if (a[4] === b[4]) {
+  if (a[THREAD_LIKES_INDEX] === b[THREAD_LIKES_INDEX]) {
     return 0;
   }
   else {
-    return (a[4] > b[4]) ? -1 : 1;
+    return (a[THREAD_LIKES_INDEX] > b[THREAD_LIKES_INDEX]) ? -1 : 1;
   }
 }
 function t_compareComments(a, b) {
-  if (a[5] === b[5]) {
+  if (a[THREAD_COMMENTS_INDEX] === b[THREAD_COMMENTS_INDEX]) {
     return 0;
   }
   else {
-    return (a[5] > b[5]) ? -1 : 1;
+    return (a[THREAD_COMMENTS_INDEX] > b[THREAD_COMMENTS_INDEX]) ? -1 : 1;
   }
 }
 function t_compareSortNewest(a, b) {
-  const date_arr_a = datestring_to_arr(a[3]);
-  const date_arr_b = datestring_to_arr(b[3]);
+  const date_arr_a = datestring_to_arr(a[THREAD_DATES_INDEX]);
+  const date_arr_b = datestring_to_arr(b[THREAD_DATES_INDEX]);
 
   for (let i = 0; i < date_arr_a.length; i++) {
     if (date_arr_a[i] > date_arr_b[i]) {
@@ -134,8 +143,8 @@ function t_compareSortNewest(a, b) {
   return 0;
 }
 function t_compareSortOldest(a, b) {
-  const date_arr_a = datestring_to_arr(a[3]);
-  const date_arr_b = datestring_to_arr(b[3]);
+  const date_arr_a = datestring_to_arr(a[THREAD_DATES_INDEX]);
+  const date_arr_b = datestring_to_arr(b[THREAD_DATES_INDEX]);
 
   for (let i = 0; i < date_arr_a.length; i++) {
     if (date_arr_a[i] < date_arr_b[i]) {
@@ -147,17 +156,31 @@ function t_compareSortOldest(a, b) {
   }
   return 0;
 }
+function t_compareSortLastUpdate(a, b) {
+  const date_arr_a = datestring_to_arr(a[THREAD_UPDATE_INDEX]);
+  const date_arr_b = datestring_to_arr(b[THREAD_UPDATE_INDEX]);
+
+  for (let i = 0; i < date_arr_a.length; i++) {
+    if (date_arr_a[i] > date_arr_b[i]) {
+      return -1;
+    }
+    else if (date_arr_a[i] < date_arr_b[i]) {
+      return 1;
+    }
+  }
+  return 0;
+}
 function c_compareLikes(a, b) {
-  if (a[3] === b[3]) {
+  if (a[COMMENT_LIKES_INDEX] === b[COMMENT_LIKES_INDEX]) {
     return 0;
   }
   else {
-    return (a[3] > b[3]) ? -1 : 1;
+    return (a[COMMENT_LIKES_INDEX] > b[COMMENT_LIKES_INDEX]) ? -1 : 1;
   }
 }
 function c_compareSortNewest(a, b) {
-  const date_arr_a = datestring_to_arr(a[2]);
-  const date_arr_b = datestring_to_arr(b[2]);
+  const date_arr_a = datestring_to_arr(a[COMMENT_DATES_INDEX]);
+  const date_arr_b = datestring_to_arr(b[COMMENT_DATES_INDEX]);
 
   for (let i = 0; i < date_arr_a.length; i++) {
     if (date_arr_a[i] > date_arr_b[i]) {
@@ -170,8 +193,8 @@ function c_compareSortNewest(a, b) {
   return 0;
 }
 function c_compareSortOldest(a, b) {
-  const date_arr_a = datestring_to_arr(a[2]);
-  const date_arr_b = datestring_to_arr(b[2]);
+  const date_arr_a = datestring_to_arr(a[COMMENT_DATES_INDEX]);
+  const date_arr_b = datestring_to_arr(b[COMMENT_DATES_INDEX]);
 
   for (let i = 0; i < date_arr_a.length; i++) {
     if (date_arr_a[i] < date_arr_b[i]) {
@@ -184,10 +207,10 @@ function c_compareSortOldest(a, b) {
   return 0;
 }
 function c_compareSortHasImage(a, b) {
-  if (a[5] === '_' && b[5] === '_') {
+  if (a[COMMENT_IMAGE_INDEX] === '_' && b[COMMENT_IMAGE_INDEX] === '_') {
     return 0
   }
-  else if (a[5] === '_') {
+  else if (a[COMMENT_IMAGE_INDEX] === '_') {
     return 1
   }
   else {
@@ -272,19 +295,16 @@ function check_file_exists(file) {
     .catch(() => false)
 }
 // Tries to delete a file
-function delete_file(image_file_path) {
-  check_type(image_file_path, STRING_TYPE)
-
-  if (check_file_exists(image_file_path)) {
-    try {
+async function delete_file(image_file_path) {
+  try {
+    check_type(image_file_path, STRING_TYPE)
+    let res = await check_file_exists(image_file_path)
+    if (res == true) {
       fspromise.unlink(image_file_path)
     }
-    catch {
-      throw "Problem deleting file"
-    }
   }
-  else {
-    throw "File not found"
+  catch (e) {
+    return
   }
 }
 // Generates an id key for a given path
@@ -300,8 +320,6 @@ async function generate_id_key(path) {
   return int_to_id(id_int);
 
 }
-
-
 
 d = `App get requests`
 
@@ -410,7 +428,7 @@ app.get("/threads", async function (req, res) {
     // Getting all threads that include the search result and placing into an array
     for (let i = 0; i < thread_arr.length; i++) {
       if (thread_arr[i]["title"].includes(search)) {
-        arr.push([thread_arr[i]["id"], thread_arr[i]["title"], thread_arr[i]["body"], thread_arr[i]["date"],
+        arr.push([thread_arr[i]["id"], thread_arr[i]["title"], thread_arr[i]["body"], thread_arr[i]["date"], thread_arr[i]["lastupdate"],
         thread_arr[i]["likes"], thread_arr[i]["comments"]])
       }
     }
@@ -421,6 +439,9 @@ app.get("/threads", async function (req, res) {
     }
     else if (select == 'date-oldest') {
       arr.sort(t_compareSortOldest);
+    }
+    else if (select == 'last-update') {
+      arr.sort(t_compareSortLastUpdate);
     }
     else if (select == 'likes') {
       arr.sort(t_compareLikes);
@@ -435,7 +456,7 @@ app.get("/threads", async function (req, res) {
 
     let items = arr.slice(start, end)
     while (items.length < 5) {
-      items.push(['_', '_', '_', '_', '_', '_'])
+      items.push(['_', '_', '_', '_', '_', '_','_'])
     }
 
     res.send(JSON.stringify(items))
@@ -566,6 +587,49 @@ app.get("/threadinfo", async function (req, res) {
 
 });
 
+app.get("/getlastupdate", async function (req, res) {
+
+  // Validating body
+  try {
+    check_dict_has(req, "query")
+    check_dict_has(req.query, "thread-id")
+  }
+  catch {
+    res.status(400).end()
+    return
+  }
+  let thread_id = req.query["thread-id"]
+  try {
+    check_type(thread_id, STRING_TYPE);
+    check_valid_id(thread_id);
+  }
+  catch {
+    res.status(400).end()
+    return
+  }
+
+  try {
+    const files = await open_json_file(thread_db_fp)
+    const thread_arr = files["threads"]
+
+    for (let i = 0; i < thread_arr.length; i++) {
+      if (thread_arr[i]["id"] == thread_id) {
+        res.json({"last_update": thread_arr[i]["lastupdate"]})
+        return
+      }
+    }
+    res.status(400).end()
+    return
+  }
+  catch (e) {
+    console.log("Backend problem - /getlastupdate")
+    console.log(e)
+    res.status(400).end()
+    return
+  }
+});
+
+
 d = `App post requests`
 
 // Creates a new thread/comment
@@ -619,6 +683,7 @@ app.post("/createnewthread", async function (req, res) {
       "title": thread_title,
       "body": thread_text,
       "date": date_string,
+      "lastupdate": date_string,
       "likes": likes,
       "comments": comments,
     })
@@ -662,6 +727,7 @@ app.post("/addcomment", upload.single("file"), async function (req, res) {
 
       if (!(suffix === ".png" || suffix === ".jpg" || suffix === '.jpeg')) {
         res.json({"error":"file"})
+        console.log(`${tempPath} - temp path`)
         delete_file(tempPath);
         return;
       }
@@ -728,6 +794,7 @@ app.post("/addcomment", upload.single("file"), async function (req, res) {
     for (let i = 0; i < threadJsonData.threads.length; i++) {
       if (threadJsonData.threads[i]["id"] == thread_id) {
         threadJsonData.threads[i]["comments"] += 1
+        threadJsonData.threads[i]["lastupdate"] = date_string
       }
     }
 
