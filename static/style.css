@@ -1,21 +1,184 @@
+/* 
+Debug measures */
 * {
     font-family: monospace;
 
 }
+/* div {
+    border-style: solid;
+    
+} */
 
+
+
+
+
+/* Useful class styles */
+@media (max-width: 811px) {
+    .div-centre {
+        width: 100%;
+        text-align: center;
+    }
+}
+@media (min-width: 811px) {
+    .div-centre {
+        margin: auto;
+        width: 50%;
+        text-align: center;
+    }
+}
+
+
+.hidden-item {
+    display: none;
+}
+.text-align-center {
+    text-align: center;
+}
+.text-align-left {
+    text-align: left;
+}
+
+/* Manages logo and text at the top */
+#text-logo {
+    font-style: italic;
+    background-color: #C1E6FF;
+    color: #808080;
+    border-style: solid;
+    min-width: 395px;
+    
+}
+#text-name {
+    display: inline-block;
+    width: 400px;
+    
+}
+
+
+
+
+/* Filter table */
+#thread-filter-table {
+    width: 100%;
+}
+#thread-filter-table-row {
+    align-items: center;
+    width: 100%;
+}
+#thread-filter-table-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+.thread-search-bar {
+    color: #142633;
+    border-style: solid;
+    border-width: 1.7px;
+    border-color: #000000;
+
+}
+.thread-select-bar {
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: #fff;
+    border-width: 1.7px;
+    border-color: #000000;
+    border-style: solid;
+    color: #918A91;
+    cursor: pointer;
+  }
+#new-thread {
+    background-color: #00B512;
+    color: #FFFFFF;
+    font-weight: bold;
+    border-width: 1.7px;
+    border-style: solid;
+    border-color: #000000;
+    
+}
+
+
+
+/* Thread table */
+#thread-table {
+    user-select: none;
+    width: 100%;
+    border-collapse: collapse;
+    border:double;
+    min-width: 401px;
+}
+.thread-table-row {
+    line-height: 14px;
+    background-color: #E8F5FF;
+    
+}
+.thread-table-header-row {
+    border:double;
+}
+.thread-table-item {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    
+}
+.thread-title {
+    width: 200px;
+    min-width: 200px;
+    max-width: 200px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: left;
+    overflow:hidden;
+}
+
+
+/* Page navigation buttons */
+.navigation-button {
+    background-color: #96D3FF;
+    border-style: solid;
+    border-width: 1.7px;
+    border-color: #000000;
+}
+#thread-page-transition-subdiv {
+    min-width: 395px;
+}
+
+
+/* new thread iframe */
+.new-thread-table {
+    width: 100%;
+}
+.new-thread-row {
+    width: 100%;
+}
+.new-thread-table-item {
+    width: 100%;
+}
+#new-thread-title-box {
+    width: 98%;
+}
+#new-thread-body-box {
+    width: 98%;
+}
+#new-thread-submit {
+    width: 100%;
+    background-color: #00B512;
+    color: #FFFFFF;
+    font-weight: bold;
+    border-width: 1.7px;
+    border-style: solid;
+    border-color: #000000;
+    height: 28px;
+}
+#new-thread-div {
+    border-width: 1.7px; 
+    border-style: solid;
+    border-color: black;
+}
+
+
+/* iframe information */
 #extra-content {
     border: 0;
     width: 100%;
     height: 500px;
-}
-
-#thread-table {
-    border: 1px solid black;
-    border-collapse: collapse;
-    user-select: none;
-}
-
-tr {
-    background-color: #96D4D4;
-
 }
