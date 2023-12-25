@@ -1,5 +1,5 @@
-submit_thread_element = document.getElementById("submit-thread")
-close_element = document.getElementById("close")
+const submit_thread_element = document.getElementById("new-thread-submit")
+const close_element = document.getElementById("new-thread-close")
 
 // Button listeners
 submit_thread_element.addEventListener("click", submit_thread);
@@ -7,16 +7,16 @@ close_element.addEventListener("click", close_doc);
 
 // POST request to send a new thread to the server
 async function submit_thread() {
-    title_box = document.getElementById("title-box")
-    body_box = document.getElementById("body-box")
+    const title_box = document.getElementById("new-thread-title-box")
+    const body_box = document.getElementById("new-thread-body-box")
 
-    thread_title = title_box.value
-    thread_body = body_box.value
+    const thread_title = title_box.value
+    const thread_body = body_box.value
 
     title_box.value = ''
     body_box.value = ''
 
-    promise = await fetch("./createnewthread",
+    const promise = await fetch("./createnewthread",
         {
             headers: {
                 'Content-Type': 'application/json'
@@ -27,13 +27,13 @@ async function submit_thread() {
                 "body": thread_body
             })
         })
-    json_obj = await promise.json()
+    const json_obj = await promise.json()
 
     if (json_obj["error"] == "length") {
         alert("Thread title/body length not in range")
     }
     else {
-        new_thread_id = json_obj["thread-id"]
+        const new_thread_id = json_obj["thread-id"]
         await window.parent.update_thread_display()
         post_success(new_thread_id)
     }

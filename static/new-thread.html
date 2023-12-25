@@ -5,12 +5,24 @@
 </head>
 
 <body>
+    <div id="new-thread-div">
     <form>
-        <input type="text" id="title-box" placeholder="Enter thread title...">
-        <input type="Button" id="close" value="X"><br><br>
-        <textarea id="body-box" rows="4" cols="50" placeholder="Enter body here..."></textarea>
-        <br>
-        <input type="button" id="submit-thread" value="Submit">
+        <table class="new-thread-table">
+            <tr class="new-thread-row">
+                <td class="new-thread-table-item">
+                    <input type="text" id="new-thread-title-box" placeholder="Enter thread title...">
+                </td>
+                <td class="new-thread-table-item">
+                    <input type="Button" id="new-thread-close" class="navigation-button" value="X">
+                </td>
+            </tr>
+        </table>
+
+
+            <textarea id="new-thread-body-box" rows="10" cols="50" placeholder="Enter body here..."></textarea>
+            <br>
+        <input type="button" id="new-thread-submit" class="add-buttons" value="POST">
     </form>
+</div>
 </body>
 <script type="text/javascript" src="./new-thread.js"></script>
