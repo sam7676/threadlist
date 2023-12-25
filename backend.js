@@ -1007,7 +1007,7 @@ app.post("/likecomment", async function (req, res) {
     check_valid_id(comment_id)
 
     like_number = req.body["like-number"]
-    check_type(like_nuber, NUMBER_TYPE)
+    like_number = parseInt(like_number)
 
   }
   catch {
