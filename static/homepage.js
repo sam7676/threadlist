@@ -172,13 +172,13 @@ function date_to_readable(str) {
 
     // YEAR MONTH DAY HOURS MINUTES SECONDS
     //    0     1   2     3       4       5
-    arr[1] = num_to_month_map[arr[1]]
+    arr[1] = make_double_digit(arr[1])
     arr[2] = make_double_digit(arr[2])
     arr[3] = make_double_digit(arr[3])
     arr[4] = make_double_digit(arr[4])
 
 
-    return `${arr[1]} ${arr[2]}, ${arr[0]} at ${arr[3]}:${arr[4]}`
+    return `${arr[1]}/${arr[2]}/${arr[0]} ${arr[3]}:${arr[4]}`
 }
 
 // Inserts a character at the beginning of a string

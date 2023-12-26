@@ -170,6 +170,10 @@ function update_comment_table(data) {
     }
 }
 
+
+
+
+
 // // Updates which threads are currently shown to the user
 async function update_comment_display() {
 

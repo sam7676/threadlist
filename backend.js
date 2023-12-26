@@ -325,7 +325,7 @@ d = `App get requests`
 
 // Returns the home page
 app.get("/", function (req, res) {
-  res.sendFile(path.join(__dirname, './homepage.html'));
+  res.sendFile(path.join(__dirname, './static/homepage.html'));
 });
 
 // Returns the number of thread/comment pages available to view

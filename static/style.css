@@ -11,13 +11,13 @@ Debug measures */
 
 
 /* Useful class styles */
-@media (max-width: 811px) {
+@media (max-width: 850px) {
     .div-centre {
         width: 100%;
         text-align: center;
     }
 }
-@media (min-width: 811px) {
+@media (min-width: 850px) {
     .div-centre {
         margin: auto;
         width: 50%;
