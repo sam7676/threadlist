@@ -5,21 +5,59 @@
 </head>
 
 <body>
-    <label id="thread-title"></label> <label id="thread-num"></label> <input type="Button" id="close" value="X">
-    <br><label id="thread-body"></label>
-    <br><label id="thread-date"></label>
-    <br><label id="thread-last-update"></label>
-    <input type="Button" id="delete-thread" value="Delete">
+
+    <div id="view-thread-div">
+    <table class="view-thread-table">
+        <tr class="view-thread-row">
+            <td class="view-thread-table-item">
+                <label id="view-thread-title"></label>
+            </td>
+            <td class="view-thread-table-item">
+                <input type="Button" id="view-thread-close" class="blue-button" value="X">
+            </td>
+        </tr>
+    </table>
+    </div>
+
+
+
+
+    <div class="div-centre">
+        <p id="view-thread-body"></p>
+    </div>
+
+
+    <div id="view-table-div" class="div-centre">
+        <table id="view-table">
+            <tr class="view-table-row">
+                <td class="view-table-item">
+                    <input type="Button" id="delete-thread" class="blue-button" value="Delete">
+                </td>
+                <td class="view-table-item">
+                    <div class="view-table-date-last">
+                        <label>Date posted: </label>
+                        <label id="thread-date"></label>
+                    </div>
+                    <div class="view-table-date-last">
+                        <label>Last update: </label>
+                    <label id="thread-last-update"></label>
+                    </div>
+                    
+                </td>
+                <td class="view-table-item">
+                    <input type="Button" id="dislike-thread" class="blue-button" value="-">
+                    <label>❤: </label>
+                    <label id="thread-likes"></label>
+                    <input type="Button" id="like-thread" class="blue-button" value="+">
+                </td>
+            </tr>
+        </table>
+    </div>
+
     <br>
-    <input type="Button" id="dislike-thread" value="-">
-    Likes: 
-    <label id="thread-likes"></label>
-    <input type="Button" id="like-thread" value="+"><br>
 
 
 
-    Comments:
-    <label id="thread-comments"></label>
 
 
 
@@ -89,7 +127,7 @@
     <div id="image-div-5"><label>_</label></div>
     <br>
 
-    
+
     <!-- Buttons to alter the current page -->
     <button type="button" id="back-comment-page">Back</button>
     <label>Page</label>
@@ -101,12 +139,13 @@
 
 
     <form enctype="multipart/form-data" id="submit-comment-form">
-        <textarea id="new-comment-box" name="comment-body" rows="4" cols="50" placeholder="New comment..."></textarea><br>
+        <textarea id="new-comment-box" name="comment-body" rows="4" cols="50"
+            placeholder="New comment..."></textarea><br>
         <input type="file" id="upload-file" name="file">
         <input type="button" id="submit-comment" value="POST">
     </form>
-    
 
-    
+
+
 </body>
 <script type="text/javascript" src="./view-thread.js"></script>

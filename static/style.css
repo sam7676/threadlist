@@ -5,11 +5,8 @@ Debug measures */
 
 }
 /* div {
-    border-style: solid;
-    
+    border: 2px black solid;
 } */
-
-
 
 
 
@@ -132,7 +129,7 @@ Debug measures */
 
 
 /* Page navigation buttons */
-.navigation-button {
+.blue-button {
     background-color: #96D3FF;
     border-style: solid;
     border-width: 1.7px;
@@ -176,9 +173,55 @@ Debug measures */
 }
 
 
+/* view thread iframe */
+.view-thread-table {
+    width: 100%;
+}
+.view-thread-row {
+    width: 100%;
+}
+.view-thread-table-item {
+    width: 100%;
+}
+#view-thread-title-box {
+    width: 98%;
+}
+#view-thread-div {
+    border-width: 1.7px; 
+    border-style: solid;
+    border-color: black;
+}
+#view-thread-body {
+    width: 99%;
+    border-style: double;
+    height: 200px;
+    display: inline-block;
+    text-align: start;
+
+}
+
+
+#view-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 401px;
+}
+.view-table-row {
+    line-height: 14px;
+    
+}
+.view-table-item {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.view-table-date-last {
+    line-height: 16px;
+}
+
+
 /* iframe information */
 #extra-content {
     border: 0;
     width: 100%;
-    height: 500px;
+    height: 1000px;
 }

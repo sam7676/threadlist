@@ -1,6 +1,6 @@
 var thread_id = window.parent.selected_thread
 
-element_close = document.getElementById("close")
+element_close = document.getElementById("view-thread-close")
 element_delete_thread_button = document.getElementById("delete-thread")
 element_like_thread_button = document.getElementById("like-thread")
 element_dislike_thread_button = document.getElementById("dislike-thread")
@@ -25,8 +25,6 @@ element_submit_comment_button.addEventListener("click", submit_comment);
 var thread_likes = 0
 
 
-document.getElementById("thread-num").innerHTML = thread_id
-
 get_thread_info()
 update_comment_form_max();
 update_comment_display();
@@ -42,12 +40,13 @@ async function get_thread_info() {
 
     thread_likes = result["likes"]
 
-    document.getElementById("thread-title").innerHTML = result["title"]
-    document.getElementById("thread-body").innerHTML = result["body"]
-    document.getElementById("thread-date").innerHTML = result["date"]
-    document.getElementById("thread-last-update").innerHTML = result["lastupdate"]
+    
+
+    document.getElementById("view-thread-title").innerHTML = result["title"]
+    document.getElementById("view-thread-body").innerHTML = result["body"]
+    document.getElementById("thread-date").innerHTML = window.parent.date_to_readable(result["date"])
+    document.getElementById("thread-last-update").innerHTML = window.parent.date_to_readable(result["lastupdate"])
     document.getElementById("thread-likes").innerHTML = thread_likes
-    document.getElementById("thread-comments").innerHTML = result["comments"]
 
 }
 
@@ -200,7 +199,6 @@ async function get_comment_count() {
     }), { method: "GET" })
 
     json_obj = await promise.json()
-    document.getElementById("thread-comments").innerHTML = json_obj["comment_count"]
     document.getElementById("max-comment-page").innerHTML = json_obj["page_count"]
 }
 
