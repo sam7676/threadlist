@@ -7,16 +7,16 @@
 <body>
 
     <div id="view-thread-div">
-    <table class="view-thread-table">
-        <tr class="view-thread-row">
-            <td class="view-thread-table-item">
-                <label id="view-thread-title"></label>
-            </td>
-            <td class="view-thread-table-item">
-                <input type="Button" id="view-thread-close" class="blue-button" value="X">
-            </td>
-        </tr>
-    </table>
+        <table class="view-thread-table">
+            <tr class="view-thread-row">
+                <td class="view-thread-table-item">
+                    <label id="view-thread-title"></label>
+                </td>
+                <td class="view-thread-table-item">
+                    <input type="Button" id="view-thread-close" class="blue-button" value="X">
+                </td>
+            </tr>
+        </table>
     </div>
 
 
@@ -28,7 +28,7 @@
 
 
     <div id="view-table-div" class="div-centre">
-        <table id="view-table">
+        <table class="view-table">
             <tr class="view-table-row">
                 <td class="view-table-item">
                     <input type="Button" id="delete-thread" class="blue-button" value="Delete">
@@ -40,9 +40,9 @@
                     </div>
                     <div class="view-table-date-last">
                         <label>Last update: </label>
-                    <label id="thread-last-update"></label>
+                        <label id="thread-last-update"></label>
                     </div>
-                    
+
                 </td>
                 <td class="view-table-item">
                     <input type="Button" id="dislike-thread" class="blue-button" value="-">
@@ -62,89 +62,246 @@
 
 
 
-    <!-- Form to update the threads currently on display -->
-    <form>
-        <label>Sort by:</label>
+    <!-- Form to update the comments currently on display -->
+    <div id="view-comment-settings-div" class="div-centre">
+        <table id="view-comment-filter-table">
+            <tr id="view-comment-filter-table-row">
+                <td class="view-comment-filter-table-item"><label id="view-comment-intro-label">Comments</label>
+                </td>
+                <form>
+                    <td class="view-comment-filter-table-item">
+                        <label>Sort by:</label>
 
-        <select name="sortby" id="sortby-comments">
-            <option value="date-newest">Date posted (newest)</option>
-            <option value="date-oldest">Date posted (oldest)</option>
-            <option value="likes">Likes</option>
-            <option value="has-image">Has image</option>
-        </select>
+                        <select name="sortby" id="sortby-comments" class="view-comment-select-bar">
+                            <option value="date-newest">Date posted (newest)</option>
+                            <option value="date-oldest">Date posted (oldest)</option>
+                            <option value="likes">Likes</option>
+                            <option value="has-image">Has image</option>
+                        </select>
+                    </td>
 
-        <label>Filter:</label>
-        <input id="search-comments" type="text" placeholder=Search...>
-        <button id="get-comments" type="button">Go</button>
-    </form>
+                    <td class="view-comment-filter-table-item"><label>Filter:</label>
+                        <input id="search-comments" type="text" class="view-comment-search-bar" placeholder=Search...>
+                    </td>
+                    <td class="view-comment-filter-table-item">
+                        <button id="get-comments" type="button" class="blue-button">Go</button>
+                    </td>
+                </form>
+            </tr>
+        </table>
+
+    </div>
+
+
+
+
 
 
     <!-- Label layout representing 5 comments -->
+    <table id="five-comment-table">
+        <tr class="five-comment-table-row" id="comment-row-1">
+            <td class="five-comment-table-item">
+                <div class="div-centre">
+                    <div class="body-comment">
+                        <label id="body-comment-1">a</label>
+                    </div>
+                    <label id="id-comment-1" class="comment-id">b</label>
+                    <div id="image-div-1"><label>_</label></div>
+                    <br>
+                    <table class="view-comment">
+                        <tr class="view-comment-row">
+                            <td class="view-comment-item">
+                                <button type="button" id="delete-comment-row1" class="view-comment-delete-button"
+                                    onclick="delete_comment_check(1)">Delete</button>
+                            </td>
+                            <td class="view-comment-item">
+                                <div class="view-comment-date-last">
+                                    <label>Date posted: </label>
+                                    <label id="date-comment-1">c</label>
+                                </div>
+                            </td>
+                            <td class="view-comment-item">
+                                <button type="button" id="dislike-comment-row1" class="view-comment-dislike-button"
+                                    onclick="like_comment(1, -1)">-</button>
+                                <label>❤: </label>
+                                <label id="likes-comment-1">d</label>
+                                <button type="button" id="like-comment-row1" class="view-comment-like-button"
+                                    onclick="like_comment(1, 1)">+</button>
+                            </td>
+            </td>
+        </tr>
+    </table>
+    </div>
+    </tr>
 
-    <label id="body-comment-1">a</label>
-    <label id="id-comment-1">b</label>
-    <label id="date-comment-1">c</label>
-    <button type="button" id="dislike-comment-row1" onclick="like_comment(1, -1)">-</button>
-    <label id="likes-comment-1">d</label>
-    <button type="button" id="like-comment-row1" onclick="like_comment(1, 1)">+</button>
-    <button type="button" id="delete-comment-row1" onclick="delete_comment_check(1)">X</button>
-    <div id="image-div-1"><label>_</label></div>
-    <br>
-    <label id="body-comment-2">e</label>
-    <label id="id-comment-2">f</label>
-    <label id="date-comment-2">g</label>
-    <button type="button" id="dislike-comment-row2" onclick="like_comment(2, -1)">-</button>
-    <label id="likes-comment-2">h</label>
-    <button type="button" id="like-comment-row2" onclick="like_comment(2, 1)">+</button>
-    <button type="button" id="delete-comment-row2" onclick="delete_comment_check(2)">X</button>
-    <div id="image-div-2"><label>_</label></div>
-    <br>
-    <label id="body-comment-3">i</label>
-    <label id="id-comment-3">j</label>
-    <label id="date-comment-3">k</label>
-    <button type="button" id="dislike-comment-row3" onclick="like_comment(3, -1)">-</button>
-    <label id="likes-comment-3">l</label>
-    <button type="button" id="like-comment-row3" onclick="like_comment(3, 1)">+</button>
-    <button type="button" id="delete-comment-row3" onclick="delete_comment_check(3)">X</button>
-    <div id="image-div-3"><label>_</label></div>
-    <br>
-    <label id="body-comment-4">m</label>
-    <label id="id-comment-4">n</label>
-    <label id="date-comment-4">o</label>
-    <button type="button" id="dislike-comment-row4" onclick="like_comment(4, -1)">-</button>
-    <label id="likes-comment-4">p</label>
-    <button type="button" id="like-comment-row4" onclick="like_comment(4, 1)">+</button>
-    <button type="button" id="delete-comment-row4" onclick="delete_comment_check(4)">X</button>
-    <div id="image-div-4"><label>_</label></div>
-    <br>
-    <label id="body-comment-5">q</label>
-    <label id="id-comment-5">r</label>
-    <label id="date-comment-5">s</label>
-    <button type="button" id="dislike-comment-row5" onclick="like_comment(5, -1)">-</button>
-    <label id="likes-comment-5">t</label>
-    <button type="button" id="like-comment-row5" onclick="like_comment(5, 1)">+</button>
-    <button type="button" id="delete-comment-row5" onclick="delete_comment_check(5)">X</button>
-    <div id="image-div-5"><label>_</label></div>
-    <br>
+    <tr class="five-comment-table-row" id="comment-row-2">
+        <td class="five-comment-table-item">
+            <div class="div-centre">
+                <div class="body-comment">
+                    <label id="body-comment-2">a</label>
+                </div>
+                <label id="id-comment-2" class="comment-id">b</label>
+                <div id="image-div-2"><label>_</label></div>
+                <br>
+                <table class="view-comment">
+                    <tr class="view-comment-row">
+                        <td class="view-comment-item">
+                            <button type="button" id="delete-comment-row2" class="view-comment-delete-button"
+                                onclick="delete_comment_check(2)">Delete</button>
+                        </td>
+                        <td class="view-comment-item">
+                            <div class="view-comment-date-last">
+                                <label>Date posted: </label>
+                                <label id="date-comment-2">c</label>
+                            </div>
+                        </td>
+                        <td class="view-comment-item">
+                            <button type="button" id="dislike-comment-row2" class="view-comment-dislike-button"
+                                onclick="like_comment(2, -1)">-</button>
+                            <label>❤: </label>
+                            <label id="likes-comment-2">d</label>
+                            <button type="button" id="like-comment-row2" class="view-comment-like-button"
+                                onclick="like_comment(2, 1)">+</button>
+                        </td>
+        </td>
+    </tr>
+    </table>
+    </div>
+    </tr>
 
+    <tr class="five-comment-table-row" id="comment-row-3">
+        <td class="five-comment-table-item">
+            <div class="div-centre">
+                <div class="body-comment">
+                    <label id="body-comment-3">a</label>
+                </div>
+                <label id="id-comment-3" class="comment-id">b</label>
+                <div id="image-div-3"><label>_</label></div>
+                <br>
+                <table class="view-comment">
+                    <tr class="view-comment-row">
+                        <td class="view-comment-item">
+                            <button type="button" id="delete-comment-row3" class="view-comment-delete-button"
+                                onclick="delete_comment_check(3)">Delete</button>
+                        </td>
+                        <td class="view-comment-item">
+                            <div class="view-comment-date-last">
+                                <label>Date posted: </label>
+                                <label id="date-comment-3">c</label>
+                            </div>
+                        </td>
+                        <td class="view-comment-item">
+                            <button type="button" id="dislike-comment-row3" class="view-comment-dislike-button"
+                                onclick="like_comment(3, -1)">-</button>
+                            <label>❤: </label>
+                            <label id="likes-comment-3">d</label>
+                            <button type="button" id="like-comment-row3" class="view-comment-like-button"
+                                onclick="like_comment(3, 1)">+</button>
+                        </td>
+        </td>
+    </tr>
+    </table>
+    </div>
+    </tr>
+
+    <tr class="five-comment-table-row" id="comment-row-4">
+        <td class="five-comment-table-item">
+            <div class="div-centre">
+
+                <div class="body-comment">
+                    <label id="body-comment-4">a</label>
+                </div>
+                <label id="id-comment-4" class="comment-id">b</label>
+                <div id="image-div-4"><label>_</label></div>
+                <br>
+                <table class="view-comment">
+                    <tr class="view-comment-row">
+                        <td class="view-comment-item">
+                            <button type="button" id="delete-comment-row4" class="view-comment-delete-button"
+                                onclick="delete_comment_check(4)">Delete</button>
+                        </td>
+                        <td class="view-comment-item">
+                            <div class="view-comment-date-last">
+                                <label>Date posted: </label>
+                                <label id="date-comment-4">c</label>
+                            </div>
+                        </td>
+                        <td class="view-comment-item">
+                            <button type="button" id="dislike-comment-row4" class="view-comment-dislike-button"
+                                onclick="like_comment(4, -1)">-</button>
+                            <label>❤: </label>
+                            <label id="likes-comment-4">d</label>
+                            <button type="button" id="like-comment-row4" class="view-comment-like-button"
+                                onclick="like_comment(4, 1)">+</button>
+                        </td>
+        </td>
+    </tr>
+    </table>
+    </div>
+    </tr>
+
+    <tr class="five-comment-table-row" id="comment-row-5">
+        <td class="five-comment-table-item">
+            <div class="div-centre">
+                <div class="body-comment">
+                    <label id="body-comment-5">a</label>
+                </div>
+                <label id="id-comment-5" class="comment-id">b</label>
+                <div id="image-div-5"><label>_</label></div>
+                <br>
+                <table class="view-comment">
+                    <tr class="view-comment-row">
+                        <td class="view-comment-item">
+                            <button type="button" id="delete-comment-row5" class="view-comment-delete-button"
+                                onclick="delete_comment_check(5)">Delete</button>
+                        </td>
+                        <td class="view-comment-item">
+                            <div class="view-comment-date-last">
+                                <label>Date posted: </label>
+                                <label id="date-comment-5">c</label>
+                            </div>
+                        </td>
+                        <td class="view-comment-item">
+                            <button type="button" id="dislike-comment-row5" class="view-comment-dislike-button"
+                                onclick="like_comment(5, -1)">-</button>
+                            <label>❤: </label>
+                            <label id="likes-comment-5">d</label>
+                            <button type="button" id="like-comment-row5" class="view-comment-like-button"
+                                onclick="like_comment(5, 1)">+</button>
+                        </td>
+        </td>
+    </tr>
+    </table>
+    </div>
+    </tr>
+
+
+    </table>
 
     <!-- Buttons to alter the current page -->
-    <button type="button" id="back-comment-page">Back</button>
-    <label>Page</label>
-    <label id="form-comment-page">1</label>
-    <label>of</label>
-    <label id="max-comment-page">1</label>
-    <button type="button" id="next-comment-page">Next</button>
-    </form>
+    <div class="div-centre page-transition-subdiv">
+
+        <button type="button" class="blue-button" id="back-comment-page">back</button>
+        <label>Page</label>
+        <label id="form-comment-page">1</label>
+        <label>of</label>
+        <label id="max-comment-page">1</label>
+        <button type="button" class="blue-button" id="next-comment-page">next</button>
+    </div>
 
 
-    <form enctype="multipart/form-data" id="submit-comment-form">
-        <textarea id="new-comment-box" name="comment-body" rows="4" cols="50"
-            placeholder="New comment..."></textarea><br>
-        <input type="file" id="upload-file" name="file">
-        <input type="button" id="submit-comment" value="POST">
-    </form>
 
+    <br>
+    <br>
+
+    <div class="div-centre" id="submit-new-comment">
+        <form enctype="multipart/form-data" id="submit-comment-form">
+            <textarea id="new-comment-box" name="comment-body" rows="6" cols="50"
+                placeholder="New comment..."></textarea><br>
+            <input type="file" id="upload-file" name="file">
+            <br><input type="button" id="submit-comment" class="green-post-button" value="POST">
+        </form>
+    </div>
 
 
 </body>

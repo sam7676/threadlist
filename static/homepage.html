@@ -28,7 +28,7 @@
 
         <table id="thread-filter-table">
             <tr id="thread-filter-table-row">
-                <td class="thead-filter-table-item"><label id="thread-intro-label">Threads</label>
+                <td class="thread-filter-table-item"><label id="thread-intro-label">Threads</label>
                     <button type="button" id="new-thread">+</button>
                 </td>
 
@@ -36,7 +36,7 @@
                 <!-- Form to update the threads currently on display -->
                 <form id="update-threads-form">
 
-                    <td class="thead-filter-table-item">
+                    <td class="thread-filter-table-item">
                         <label>Sort by:</label>
 
                         <select name="sortby" id="sortby" class="thread-select-bar">
@@ -50,10 +50,10 @@
 
 
 
-                    <td class="thead-filter-table-item"><label>Filter:</label>
+                    <td class="thread-filter-table-item"><label>Filter:</label>
                         <input id="search" type="text" class="thread-search-bar" placeholder=Search...>
                     </td>
-                    <td class="thead-filter-table-item"><button id="get-threads" type="button"
+                    <td class="thread-filter-table-item"><button id="get-threads" type="button"
                             class="blue-button">Go</button></td>
 
                 </form>
@@ -118,11 +118,10 @@
             </tr>
         </table>
     </div>
-
     <!-- Buttons to alter the current page -->
-    <div class="div-centre" id="thread-page-transition-div">
+    <div class="div-centre">
 
-        <div id="thread-page-transition-subdiv">
+        <div class="page-transition-subdiv">
             <button type="button" class="blue-button" id="backthread">back</button>
             <label>Page</label>
             <label id="formpage">1</label>
