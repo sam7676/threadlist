@@ -13,29 +13,37 @@ async function submit_thread() {
     const thread_title = title_box.value
     const thread_body = body_box.value
 
-    title_box.value = ''
-    body_box.value = ''
+    
 
-    const promise = await fetch("./createnewthread",
-        {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            method: "POST",
-            body: JSON.stringify({
-                "title": thread_title,
-                "body": thread_body
+    try {
+
+
+        const promise = await fetch("./createnewthread",
+            {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify({
+                    "title": thread_title,
+                    "body": thread_body
+                })
             })
-        })
-    const json_obj = await promise.json()
+        const json_obj = await promise.json()
 
-    if (json_obj["error"] == "length") {
-        alert("Thread title/body length not in range")
+        if (json_obj["error"] == "length") {
+            alert("Thread title/body length not in range")
+        }
+        else {
+            title_box.value = ''
+            body_box.value = ''
+            const new_thread_id = json_obj["thread-id"]
+            await window.parent.update_thread_display()
+            post_success(new_thread_id)
+        }
     }
-    else {
-        const new_thread_id = json_obj["thread-id"]
-        await window.parent.update_thread_display()
-        post_success(new_thread_id)
+    catch {
+        alert("Network error: /createnewthread failed to execute")
     }
 
    
