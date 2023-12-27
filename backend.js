@@ -4,6 +4,7 @@ const fspromise = require('fs/promises');
 const fs = require('fs')
 const favicon = require('serve-favicon')
 const multer = require('multer')
+const sharp = require('sharp')
 
 const app = express();
 const port = 8000;
@@ -74,7 +75,7 @@ function check_dict_has(dict, item) {
     check_type(dict[item], UNDEFINED_TYPE)
     throw "Item not in dictioanry"
   }
-  catch { }
+  catch {}
 }
 function check_set_has(set, item) {
   if (!set.has(item)) {
@@ -320,6 +321,37 @@ async function generate_id_key(path) {
   return int_to_id(id_int);
 
 }
+
+async function resize_image(old_path, new_path) {
+
+  const image = await sharp(old_path).flatten({ background: '#ffffff' })
+  const metadata = await image.metadata()
+  let width = metadata.width
+  let height = metadata.height
+
+  if (width > 400) {
+    const ratio = width / 400
+    width = 400
+    height = Math.ceil(height / ratio)
+  }
+  else if (width < 100) {
+    const ratio = width / 100
+    width = 100
+    height = Math.ceil(height / ratio)
+    
+  }
+
+  const new_image = await image.resize(width, height)
+  try {
+    await new_image.toFile(new_path)
+  }
+  catch (e) {
+    console.log("Backend problem - error with resize_image module")
+    console.log(e)
+  }
+}
+
+
 
 d = `App get requests`
 
@@ -732,8 +764,13 @@ app.post("/addcomment", upload.single("file"), async function (req, res) {
         return;
       }
 
+      const newTempPath = `${tempPath}.jpg`
+
       const targetPath = path.join(__dirname, `./static/uploads/${id_string}.jpg`);
-      await fspromise.rename(tempPath, targetPath)
+      await fspromise.rename(tempPath, newTempPath)
+      await resize_image(newTempPath, targetPath)
+      delete_file(newTempPath);
+
       img_path = `./uploads/${id_string}.jpg`
     }
 
@@ -825,9 +862,9 @@ app.post("/deletethread", async function (req, res) {
   }
 
   let threadJsonData = await open_json_file(thread_db_fp);
-  var ind_to_delete = -1
+  let ind_to_delete = -1
 
-  for (var i = 0; i < threadJsonData.threads.length; i++) {
+  for (let i = 0; i < threadJsonData.threads.length; i++) {
     if (threadJsonData.threads[i]["id"] == thread_deletion_id) {
       ind_to_delete = i;
     }
@@ -844,20 +881,20 @@ app.post("/deletethread", async function (req, res) {
 
     // Deleting comments with the thread as the ID
     let commentJsonData = await open_json_file(comment_db_fp);
-    var inds_to_delete = []
+    let inds_to_delete = []
 
-    for (var i = 0; i < commentJsonData.comments.length; i++) {
+    for (let i = 0; i < commentJsonData.comments.length; i++) {
       if (commentJsonData.comments[i]["parent"] == thread_deletion_id) {
         inds_to_delete.push(i);
       }
     }
 
     while (inds_to_delete.length > 0) {
-      ind = inds_to_delete.pop()
-      image_src = commentJsonData.comments[ind]["image"]
+      const ind = inds_to_delete.pop()
+      const image_src = commentJsonData.comments[ind]["image"]
       if (image_src !== '_') {
-        comment_id = commentJsonData.comments[ind]["id"]
-        image_file_path = `./static/uploads/${comment_id}.jpg`
+        const comment_id = commentJsonData.comments[ind]["id"]
+        const image_file_path = `./static/uploads/${comment_id}.jpg`
         delete_file(image_file_path);
       }
       commentJsonData.comments.splice(ind, 1);
@@ -946,7 +983,7 @@ app.post("/deletecomment", async function (req, res) {
 // Likes a given thread/comment
 app.post("/likethread", async function (req, res) {
   let thread_id = ''
-  let like_nuber = 0
+  let like_number = 0
 
   try {
     check_dict_has(req, "body")
@@ -957,7 +994,7 @@ app.post("/likethread", async function (req, res) {
     check_valid_id(thread_id)
 
     like_number = req.body["like-number"]
-    check_type(like_nuber, NUMBER_TYPE)
+    check_type(like_number, NUMBER_TYPE)
 
   }
   catch {
