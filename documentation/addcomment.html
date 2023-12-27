@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>/addcomment</title>
+</head>
+
+<body>
+    <h1>Add comment</h1>
+    <div>
+        <p>Adds a comment to the database.<br>
+            This includes a body of text or an image.</p>
+    </div>
+
+    <div>
+        Parameters
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>Form data</td>
+                <td>FormData object</td>
+                <td>Object including thread ID, image encoded as FormData, and a form text body</td>
+            </tr>
+        </table>
+    </div>
+
+
+
+
+    <br>
+
+    <div>
+
+
+        <label>Example requests</label><br>
+        <ul>
+            <li>
+                curl -X POST ./addcomment/
+            </li>
+        </ul>
+    </div>
+
+    <br>
+
+    <div>
+        <label>Example responses</label><br>
+        <table>
+            <tr>
+                <td>{</td>
+            </tr>
+            <tr>
+                <td>"error"</td>
+                <td>:</td>
+                <td>"content"</td>
+            </tr>
+            <tr>
+                <td>}</td>
+            </tr>
+        </table>
+    </div>
+
+    <br>
+
+    <div>
+        Response fields
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>Error</td>
+                <td>String</td>
+                <td>Sends a message to the user that the content specified wasn't sufficient to post a comment. This is opposed to a 404 error, as the server has been communicated with.</td>
+            </tr>
+        </table>
+    </div>
+
+    <br>
+    <a href="_api_documentation.html">Back</a>
+
+
+</body>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>/threadinfo</title>
+</head>
+
+<body>
+    <h1>Thread info</h1>
+    <div>
+        <p>Returns information on a single thread.</p>
+    </div>
+    <div>
+        Parameters
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>id</td>
+                <td>string</td>
+                <td>The ID of the given thread</td>
+            </tr>
+
+        </table>
+    </div>
+
+    <br>
+
+    <div>
+
+
+        <label>Example requests</label><br>
+        <ul>
+            <li>
+                curl -X GET .threadinfo?id=00000004/
+            </li>
+        </ul>
+    </div>
+
+    <br>
+
+    <div>
+        <label>Example responses</label><br>
+        <table>
+            <tr>
+                <td>{</td>
+            </tr>
+            <tr>
+                <td>"id": "00000004"</td>
+            </tr>
+            <tr>
+                <td>"title": "Thread title"</td>
+            </tr>
+            <tr>
+                <td>"body": "Thread body"</td>
+            </tr>
+            <tr>
+                <td>
+                    "date":"2023-12-27-00-27-30"
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    "lastupdate": "2023-12-27-00-27-37"
+                </td>
+            </tr>
+            <tr><td>"likes": 1</td></tr>
+            <tr><td>"comments": 0</td></tr>
+            <tr>
+                <td>}</td>
+            </tr>
+            
+        </table>
+    </div>
+
+    <br>
+
+    <div>
+        Response fields
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>id</td>
+                <td>String</td>
+                <td>The unique ID given for each thread</td>
+            </tr>
+            
+            <tr>
+                <td>title</td>
+                <td>String</td>
+                <td>The title of each thread</td>
+            </tr>
+            <tr>
+                <td>body</td>
+                <td>String</td>
+                <td>The body for each thread</td>
+            </tr>
+            <tr>
+                <td>date</td>
+                <td>String</td>
+                <td>The date the thread was posted, in string format</td>
+            </tr>
+            <tr>
+                <td>lastupdate</td>
+                <td>String</td>
+                <td>The date the thread was last updated, in string format</td>
+            </tr>
+            <tr>
+                <td>likes</td>
+                <td>Number</td>
+                <td>The number of likes the thread has</td>
+            </tr>
+            <tr>
+                <td>comments</td>
+                <td>Number</td>
+                <td>The number of comments the thread has</td>
+            </tr>
+        </table>
+    </div>
+
+    <br>
+    <a href="_api_documentation.html">Back</a>
+
+
+</body>

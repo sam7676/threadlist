@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>/createnewthread</title>
+</head>
+
+<body>
+    <h1>Create new thread</h1>
+    <div>
+        <p>Adds a thread to the database.<br>
+            This includes a title and a body of text.</p>
+    </div>
+
+    <div>
+        Parameters
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>title</td>
+                <td>String</td>
+                <td>Title of the thread</td>
+            </tr>
+            <tr>
+                <td>body</td>
+                <td>String</td>
+                <td>Body of the thread</td>
+            </tr>
+        </table>
+    </div>
+
+
+
+
+    <br>
+
+    <div>
+
+
+        <label>Example requests</label><br>
+        <ul>
+            <li>
+                curl -X POST ./createnewthread/
+            </li>
+        </ul>
+    </div>
+
+    <br>
+
+    <div>
+        <label>Example responses</label><br>
+        <table>
+            <tr>
+                <td>{</td>
+            </tr>
+            <tr>
+                <td>"error"</td>
+                <td>:</td>
+                <td>"length"</td>
+            </tr>
+            <tr>
+                <td>}</td>
+            </tr>
+        </table>
+    </div>
+
+    <br>
+
+    <div>
+        Response fields
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>Error</td>
+                <td>String</td>
+                <td>Sends a message to the user that the length of the thread/body isn't in the required range.</td>
+            </tr>
+        </table>
+    </div>
+
+    <br>
+    <a href="_api_documentation.html">Back</a>
+
+
+</body>

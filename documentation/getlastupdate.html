@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>/getlastupdate</title>
+</head>
+
+<body>
+    <h1>Get last update</h1>
+    <div>
+        <p>Returns a date specifying the last time a thread was updated.</p>
+    </div>
+    <div>
+        Parameters
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>thread-id</td>
+                <td>String</td>
+                <td>ID of the thread to get the last update time of</td>
+            </tr>
+        </table>
+    </div>
+
+    <br>
+
+    <div>
+
+
+        <label>Example requests</label><br>
+        <ul>
+            <li>
+                curl -X GET ./getlastupdate?thread-id=00000004/
+            </li>
+        </ul>
+    </div>
+
+    <br>
+
+    <div>
+        <label>Example responses</label><br>
+        <table>
+            <tr>
+                <td>{</td>
+            </tr>
+            <tr>
+                <td>"last_update"</td>
+                <td>:</td>
+                <td>"2023-12-27-00-27-30"</td>
+            </tr>
+            <tr>
+                <td>}</td>
+            </tr>
+        </table>
+    </div>
+
+    <br>
+
+    <div>
+        Response fields
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>last_update</td>
+                <td>String</td>
+                <td>A string representing the time the last time the given thread was updated.</td>
+            </tr>
+        </table>
+    </div>
+
+    <br>
+    <a href="_api_documentation.html">Back</a>
+
+
+</body>

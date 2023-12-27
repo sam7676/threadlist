@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>/getcommentcount</title>
+</head>
+
+<body>
+    <h1>Get comment count</h1>
+    <div>
+        <p>Returns the number of pages of comments there are for a given thread.<br>
+            A page is defined to be a bundle of 5 threads.</p>
+    </div>
+    <div>
+        Parameters
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>thread-id</td>
+                <td>String</td>
+                <td>ID of the thread to get the comment count of</td>
+            </tr>
+        </table>
+    </div>
+
+    <br>
+
+    <div>
+
+
+        <label>Example requests</label><br>
+        <ul>
+            <li>
+                curl -X GET ./getcommentcount?thread-id=00000004/
+            </li>
+        </ul>
+    </div>
+
+    <br>
+
+    <div>
+        <label>Example responses</label><br>
+        <table>
+            <tr>
+                <td>{</td>
+            </tr>
+            <tr>
+                <td>"page_count"</td>
+                <td>:</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>"comment_count"</td>
+                <td>:</td>
+                <td>4</td>
+            </tr>
+            <tr>
+                <td>}</td>
+            </tr>
+        </table>
+    </div>
+
+    <br>
+
+    <div>
+        Response fields
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>page_count</td>
+                <td>Number</td>
+                <td>Returns the number of pages available to the user.</td>
+            </tr>
+            <tr>
+                <td>comment_count</td>
+                <td>Number</td>
+                <td>Returns the total number of comments attributed to a thread.</td>
+            </tr>
+        </table>
+    </div>
+
+    <br>
+    <a href="_api_documentation.html">Back</a>
+
+
+</body>

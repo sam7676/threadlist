@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>/comments</title>
+</head>
+
+<body>
+    <h1>Comments</h1>
+    <div>
+        <p>Returns an array of comments belonging to a thread.</p>
+    </div>
+
+    <div>
+        Parameters
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>select</td>
+                <td>String</td>
+                <td>Option specifying how the comments to be processed should be sorted</td>
+            </tr>
+            <tr>
+                <td>search</td>
+                <td>String</td>
+                <td>Option specifying whether the comments must contain a specific string</td>
+            </tr>
+            <tr>
+                <td>page</td>
+                <td>Number</td>
+                <td>Integer deciding specifying which sequence of comments should be returned, based on the "paging" system - 5 comments per page.</td>
+            </tr>
+            <tr>
+                <td>thread-id</td>
+                <td>String</td>
+                <td>Identifier for the thread to be fetched</td>
+            </tr>
+        </table>
+    </div>
+
+
+
+
+    <br>
+
+    <div>
+
+
+        <label>Example requests</label><br>
+        <ul>
+            <li>
+                curl -X GET ./comments?select=date-newest&search=&page=1/
+            </li>
+        </ul>
+    </div>
+
+    <br>
+
+    <div>
+        <label>Example responses</label><br>
+        
+        <table>
+            <tr>
+                <td>[</td>
+            </tr>
+            <tr>
+                <td>["00000081","body-1","2023-12-24-04-23-06",0,"00000034",'_']</td>
+            </tr>
+            <tr>
+                <td>["00000080","body-2","2023-12-24-04-23-03",0,"00000033","00000080.jpg"]</td>
+            </tr>
+            <tr>
+                <td>["00000079","c","2023-12-24-04-23-00",0,"00000032",'_']</td>
+            </tr>
+            <tr>
+                <td>["_","_","_","_","_","_"]</td>
+            </tr>
+            <tr>
+                <td>["_","_","_","_","_","_"]</td>
+            </tr>
+
+
+            <tr>
+                <td>]</td>
+            </tr>
+            
+        </table>
+    </div>
+
+    <br>
+
+    <div>
+        Response fields
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>Array</td>
+                <td>Array</td>
+                <td>An array displaying the five comments</td>
+            </tr>
+            <tr>
+                <td>Index zero [0]</td>
+                <td>String</td>
+                <td>The unique ID given for each comment</td>
+            </tr>
+            
+            <tr>
+                <td>Index one [1]</td>
+                <td>String</td>
+                <td>The text body of each comment</td>
+            </tr>
+            <tr>
+                <td>Index two [2]</td>
+                <td>String</td>
+                <td>The date the comment was posted, in string format</td>
+            </tr>
+            <tr>
+                <td>Index three [3]</td>
+                <td>Number</td>
+                <td>The number of likes the thread has</td>
+            </tr>
+            <tr>
+                <td>Index four [4]</td>
+                <td>String</td>
+                <td>The parent thread ID attributed to the comment</td>
+            </tr>
+            <tr>
+                <td>Index five [5]</td>
+                <td>String</td>
+                <td>A reference to the image included in the comment</td>
+            </tr>
+        </table>
+    </div>
+
+    <br>
+    <a href="_api_documentation.html">Back</a>
+
+
+</body>
