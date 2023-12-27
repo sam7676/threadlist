@@ -12,31 +12,15 @@ document.getElementById("new-thread").addEventListener("click", show_new_thread)
 document.getElementById("backthread").addEventListener("click", decrement_form_page);
 document.getElementById("nextthread").addEventListener("click", increment_form_page);
 
-const num_to_month_map = {
-    1: "Jan",
-    2: "Feb",
-    3: "Mar",
-    4: "Apr",
-    5: "May",
-    6: "Jun",
-    7: "Jul",
-    8: "Aug",
-    9: "Sep",
-    10: "Oct",
-    11: "Nov",
-    12: "Dec"
-}
 
 const THREAD_ID_INDEX = 0
 const THREAD_TITLE_INDEX = 1
-const THREAD_BODY_INDEX = 2
 const THREAD_DATES_INDEX = 3
 const THREAD_UPDATE_INDEX = 4
 const THREAD_LIKES_INDEX = 5
 const THREAD_COMMENTS_INDEX = 6
 const HEART_UNICODE = '❤'
 const COMMENT_UNICODE = '🗨'
-const TITLE_CHAR_MAX = 50
 const HIDDEN_CHAR = '⁠&#8288;'
 
 // Converts a one or two-digit number into a two-digit string.
@@ -118,32 +102,46 @@ async function update_thread_display() {
 
     await get_page_count()
     if (form_page > max_page) {
-        form_page = form_page - 1;
+        form_page = max_page;
     }
 
     let select_option = document.getElementById("sortby")
     let select_value = select_option.options[select_option.selectedIndex].value;
     let search_item = document.getElementById("search").value
 
+    try {
+        const promise = await fetch("./threads?" + new URLSearchParams({
+            'select': select_value,
+            'search': search_item,
+            'page': form_page,
+        }), { method: "GET" })
+        const result_json = await promise.json()
+        update_table(result_json)
+        update_form_max()
 
-    const promise = await fetch("./threads?" + new URLSearchParams({
-        'select': select_value,
-        'search': search_item,
-        'page': form_page,
-    }), { method: "GET" })
+    }
+    catch {
+        alert("Network error: /threads failed to return values")
+    }
 
 
-    const result_json = await promise.json()
-    update_table(result_json)
-    update_form_max()
+
+
 }
 
 // Gets the number of pages of threads in the application
 async function get_page_count() {
-    const promise = await fetch("./getpagecount", { method: "GET" })
-    const json_obj = await promise.json()
-    max_page = json_obj["page_count"]
-    document.getElementById("maxpage").innerHTML = max_page;
+    try {
+        const promise = await fetch("./getpagecount", { method: "GET" })
+        const json_obj = await promise.json()
+        max_page = json_obj["page_count"]
+        document.getElementById("maxpage").innerHTML = max_page;
+    }
+    catch {
+        alert("Network error: /getpagecount failed to return a value")
+    }
+
+
 }
 
 // If a thread is clicked on, selects the thread and triggers the view_thread script
@@ -191,12 +189,24 @@ function add_char(c, str) {
 
 // Creates a new thread and loads the new thread HTML document
 function show_new_thread() {
+    try {
     frame.src = './new-thread.html';
+    }
+    catch {
+        alert("Network error: new-thread.html unable to be fetched")
+    }
 }
 
 // Views a thread, using the selected_thread variable
 function view_thread() {
-    frame.src = './view-thread.html';
+    try {
+        frame.src = './view-thread.html';
+    }
+    catch {
+        alert("Network error: view-thread.html unable to be fetched")
+    }
+
+    
 }
 
 // Clears the extra content frame
