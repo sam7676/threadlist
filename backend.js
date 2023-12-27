@@ -1089,6 +1089,23 @@ app.post("/likecomment", async function (req, res) {
 
 
 
-app.listen(port, function () {
-  console.log(`http://127.0.0.1:${port}/`)
-});
+
+
+module.exports = {check_type, 
+  check_non_negative,
+  check_dict_has,
+  check_set_has,
+  check_length,
+  item_count_to_page_count,
+  dict_get,
+  int_to_id,
+  get_date_arr,
+  check_file_exists,
+  
+
+  app,
+  port,
+  
+  NUMBER_TYPE,
+  STRING_TYPE,
+  UNDEFINED_TYPE};
