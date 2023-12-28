@@ -7,7 +7,7 @@ const multer = require('multer')
 const sharp = require('sharp')
 
 const app = express();
-const port = 8000;
+const port = 8008;
 
 const date_map = {
   "Jan": 1, "Feb": 2, "Mar": 3, "Apr": 4,
@@ -51,52 +51,20 @@ let d = ''
 
 d = `Error checking helper functions`
 
-// Checks if the argument given is of the given type
-function check_type(inp, t) {
-  if (!(typeof (inp) == t)) {
-    throw "Argument type not matching required type"
-  }
-}
-// Checks if the argument given is non-negative
-function check_non_negative(number) {
-  if (number < 0) {
-    throw "Number must be non-negative"
-  }
-}
 // Checks that a given ID length is not greater than the maximum length
 function check_valid_id(str) {
-  if (str.length > ID_KEY_LENGTH) {
-    throw "ID length greater than the maximum length"
+  if (!typeof (str, STRING_TYPE)) {
+    throw "Error: input for check_valid_id not of string type"
   }
-}
-// Checks that a dictionary contains a given item
-function check_dict_has(dict, item) {
-  try {
-    check_type(dict[item], UNDEFINED_TYPE)
-    throw "Item not in dictioanry"
-  }
-  catch {}
-}
-function check_set_has(set, item) {
-  if (!set.has(item)) {
-    throw "Set does not contain item"
-  }
-}
-function check_length(str, min_length, max_length) {
-  check_type(str, STRING_TYPE)
-  if (!(str.length >= min_length && str.length <= max_length)) {
-    throw "String length not in range"
-  }
+
+  return str.length == ID_KEY_LENGTH
+
 }
 
 d = `Other helper functions`
 
 // Converts the number of items to the number of pages that represents it
 function item_count_to_page_count(num) {
-  // Error handling
-  check_type(num, NUMBER_TYPE)
-  check_non_negative(num)
-
   if (num == 0) {
     return 1
   }
@@ -220,14 +188,11 @@ function c_compareSortHasImage(a, b) {
 }
 // Converts an integer to an ID key used for looking up threads
 function int_to_id(x) {
-
-  check_type(x, NUMBER_TYPE);
-  check_non_negative(x);
-
   const int_string = x.toString();
-
-  check_valid_id(int_string);
-
+  if (!typeof (x) == NUMBER_TYPE || int_string.length > ID_KEY_LENGTH || x < 0) {
+    throw new Error("int_to_id: input not accepted")
+  }
+  
   const padding = '0'.repeat(ID_KEY_LENGTH - int_string.length);
   const id_string = padding.concat(int_string);
   return id_string;
@@ -273,36 +238,38 @@ function datestring_to_arr(a) {
 }
 // Returns the JSON representation of a given JSON filepath
 async function open_json_file(filepath) {
-  check_type(filepath, STRING_TYPE)
-
-  if (!check_file_exists(filepath)) {
-    throw "File not found"
+  if (!typeof (filepath) == STRING_TYPE) {
+    throw new Error("open_json_file: input type not as expected")
   }
+
   try {
     const promise = await fspromise.readFile(filepath)
     return JSON.parse(promise.toString())
   }
   catch {
-    throw "File not read"
+    throw new Error("File not read")
   }
 
 
 
 }
-// Checks if a file exists. Not error handling, returns a boolean.
-function check_file_exists(file) {
-  return fs.promises.access(file, fs.constants.F_OK)
-    .then(() => true)
-    .catch(() => false)
-}
 // Tries to delete a file
 async function delete_file(image_file_path) {
   try {
-    check_type(image_file_path, STRING_TYPE)
-    let res = await check_file_exists(image_file_path)
-    if (res == true) {
+
+    if (!typeof (image_file_path) == STRING_TYPE) {
+      throw "delete_file: input not of right type"
+    }
+
+    // note it can fail
+    try {
       fspromise.unlink(image_file_path)
     }
+    catch {
+      throw new Error("delete_file: file couldn't be deleted")
+    }
+
+
   }
   catch (e) {
     return
@@ -321,7 +288,7 @@ async function generate_id_key(path) {
   return int_to_id(id_int);
 
 }
-
+// Resizes an image to fit in the correct dimensions
 async function resize_image(old_path, new_path) {
 
   const image = await sharp(old_path).flatten({ background: '#ffffff' })
@@ -338,17 +305,17 @@ async function resize_image(old_path, new_path) {
     const ratio = width / 100
     width = 100
     height = Math.ceil(height / ratio)
-    
+
   }
 
   const new_image = await image.resize(width, height)
-  try {
-    await new_image.toFile(new_path)
-  }
-  catch (e) {
-    console.log("Backend problem - error with resize_image module")
-    console.log(e)
-  }
+  await new_image.toFile(new_path)
+
+}
+function check_file_exists(file) {
+  return fs.promises.access(file, fs.constants.F_OK)
+    .then(() => true)
+    .catch(() => false)
 }
 
 
@@ -362,73 +329,83 @@ app.get("/", function (req, res) {
 
 // Returns the number of thread/comment pages available to view
 app.get("/getpagecount", async function (req, res) {
-  let page_count = 0
-
-  // Reads the thread_db file and returns the number of pages
-  const files = await open_json_file(thread_db_fp)
   try {
+
+    let page_count = 0
+    const files = await open_json_file(thread_db_fp)
     page_count = item_count_to_page_count(files["threads"].length)
     res.send({ 'page_count': page_count });
+
   }
   catch (e) {
     console.log("Backend problem - /getpagecount")
-    console.log(e);
-    res.status(400).end();
+    console.log(e)
+    res.status(400).end()
     return
   }
 
 });
 app.get("/getcommentcount", async function (req, res) {
 
-  // Checking the query parameter appears in the request. User input validation
+
+  let thread_id = ''
+  let comment_count = 0
+
+  // Validating thread ID input
   try {
-    check_dict_has(req, "query")
-    check_dict_has(req.query, "thread-id")
+    thread_id = req.query["thread-id"]
+    if (!check_valid_id(thread_id)) {
+      throw ""
+    }
   }
   catch {
     res.status(400).end()
     return
   }
 
-  // Checking thread ID is valid. User input validation
-  const thread_id = req.query["thread-id"]
+
   try {
-    check_type(thread_id, STRING_TYPE)
-    check_valid_id(thread_id)
-  }
-  catch {
-    res.status(400).end();
-    return
-  }
 
 
-  let comment_count = 0
-  try {
-    // Reads the thread_db file and returns the number of pages
     const files = await open_json_file(comment_db_fp)
     for (let i = 0; i < files["comments"].length; i++) {
       if (files.comments[i]["parent"] == thread_id) {
         comment_count += 1
       }
     }
+
+    const page_count = item_count_to_page_count(comment_count)
+    res.send({ 'comment_count': comment_count, 'page_count': page_count })
+
+
   }
   catch (e) {
-    console.log("Backend problem - /getcommentcount - comment database not opened")
-    console.log(e);
-    res.status(400).end();
+    console.log("Backend problem - /getcommentcount")
+    console.log(e)
+    res.status(400).end()
     return
   }
 
-  const page_count = item_count_to_page_count(comment_count)
-  res.send({ 'comment_count': comment_count, 'page_count': page_count })
 });
 
 // Returns the five threads/comments that satisfy the user's request
 app.get("/threads", async function (req, res) {
 
-  // Checking query appears as a parameter. User input validation.
+  let select = ''
+  let search = ''
+  let page = ''
+
+  // Validating user input
+
   try {
-    check_dict_has(req, "query")
+    select = dict_get(req.query, "select", "date-newest");
+    search = dict_get(req.query, "search", "");
+    page = parseInt(dict_get(req.query, "page", '1'))
+
+    if (!thread_select_set.has(select)) {
+      throw ""
+    }
+
   }
   catch {
     res.status(400).end()
@@ -436,23 +413,11 @@ app.get("/threads", async function (req, res) {
   }
 
 
-  // Getting parameters
 
-  // Checking select is a valid select item, and page is an integer. User input validation.
-  const select = dict_get(req.query, "select", "date-newest");
-  const search = dict_get(req.query, "search", "");
-  let page = dict_get(req.query, "page", '1')
-  try {
-    check_set_has(thread_select_set, select)
-    page = parseInt(page);
-  }
-  catch {
-    res.status(400).end()
-    return
-  }
 
-  // Opening the threads database
   try {
+
+
     const files = await open_json_file(thread_db_fp);
     const thread_arr = files["threads"]
     let arr = []
@@ -488,10 +453,11 @@ app.get("/threads", async function (req, res) {
 
     let items = arr.slice(start, end)
     while (items.length < 5) {
-      items.push(['_', '_', '_', '_', '_', '_','_'])
+      items.push(['_', '_', '_', '_', '_', '_', '_'])
     }
 
     res.send(JSON.stringify(items))
+
   }
   catch (e) {
     console.log("Backend problem - /threads")
@@ -499,35 +465,32 @@ app.get("/threads", async function (req, res) {
     res.status(400).end()
     return
   }
+
 })
 app.get("/comments", async function (req, res) {
 
-  // Checking query appears as a parameter. User input validation.
+  let thread_id = ''
+  let select = ''
+  let search = ''
+  let page = ''
+
+  // Validating user input
+
   try {
-    check_dict_has(req, "query")
+    thread_id = req.query["thread-id"]
+    select = dict_get(req.query, "select", "date-newest");
+    search = dict_get(req.query, "search", "");
+    page = parseInt(dict_get(req.query, "page", '1'))
+
+    if (!check_valid_id(thread_id) || !comment_select_set.has(select)) {
+      throw ""
+    }
+
   }
   catch {
     res.status(400).end()
     return
   }
-
-  const select = dict_get(req.query, "select", "date-newest");
-  const search = dict_get(req.query, "search", "");
-  const thread_id = req.query["thread-id"]
-  let page = dict_get(req.query, "page", '1');
-
-  // User input validation
-  try {
-    check_set_has(comment_select_set, select);
-    page = parseInt(page);
-    check_type(thread_id, STRING_TYPE);
-    check_valid_id(thread_id);
-  }
-  catch {
-    res.status(400).end()
-    return
-  }
-
 
   try {
     const files = await open_json_file(comment_db_fp);
@@ -568,9 +531,11 @@ app.get("/comments", async function (req, res) {
   catch (e) {
     console.log("Backend problem - /comments")
     console.log(e)
-    res.status(400).end();
+    res.status(400).end()
     return
   }
+
+
 })
 
 // Returns information about an individual thread
@@ -578,18 +543,11 @@ app.get("/threadinfo", async function (req, res) {
 
   // Validating body
   try {
-    check_dict_has(req, "query")
-    check_dict_has(req.query, "id")
-  }
-  catch {
-    res.status(400).end()
-    return
-  }
 
-  let thread_id = req.query["id"]
-  try {
-    check_type(thread_id, STRING_TYPE);
-    check_valid_id(thread_id);
+    thread_id = req.query.id;
+    if (!check_valid_id(thread_id)) {
+      throw ""
+    }
   }
   catch {
     res.status(400).end()
@@ -609,6 +567,7 @@ app.get("/threadinfo", async function (req, res) {
     }
     res.status(400).end()
     return
+
   }
   catch (e) {
     console.log("Backend problem - /threadinfo")
@@ -621,19 +580,14 @@ app.get("/threadinfo", async function (req, res) {
 
 app.get("/getlastupdate", async function (req, res) {
 
+
+  let thread_id = ''
   // Validating body
   try {
-    check_dict_has(req, "query")
-    check_dict_has(req.query, "thread-id")
-  }
-  catch {
-    res.status(400).end()
-    return
-  }
-  let thread_id = req.query["thread-id"]
-  try {
-    check_type(thread_id, STRING_TYPE);
-    check_valid_id(thread_id);
+    thread_id = req.query["thread-id"]
+    if (!check_valid_id(thread_id)) {
+      throw ""
+    }
   }
   catch {
     res.status(400).end()
@@ -646,7 +600,7 @@ app.get("/getlastupdate", async function (req, res) {
 
     for (let i = 0; i < thread_arr.length; i++) {
       if (thread_arr[i]["id"] == thread_id) {
-        res.json({"last_update": thread_arr[i]["lastupdate"]})
+        res.json({ "last_update": thread_arr[i]["lastupdate"] })
         return
       }
     }
@@ -667,28 +621,25 @@ d = `App post requests`
 // Creates a new thread/comment
 app.post("/createnewthread", async function (req, res) {
 
+  let thread_title = ''
+  let thread_text = ''
+
   // Checking all body elements are present
   try {
-    check_dict_has(req, "body")
-    check_dict_has(req.body, "title")
-    check_dict_has(req.body, "body")
+    thread_title = req.body.title.trim()
+    thread_text = req.body.body.trim()
   }
   catch {
     res.status(400).end()
     return
   }
 
-  // Getting variables from the body
-  const thread_title = req.body["title"].trim();
-  const thread_text = req.body["body"].trim();
+
 
 
   // Checking length of thread
-  try {
-    check_length(thread_title, THREAD_MIN_TITLE_LENGTH, THREAD_MAX_TITLE_LENGTH)
-    check_length(thread_text, THREAD_MIN_BODY_LENGTH, THREAD_MAX_BODY_LENGTH)
-  }
-  catch {
+  if (!(thread_title.length >= THREAD_MIN_TITLE_LENGTH && thread_title.length <= THREAD_MAX_TITLE_LENGTH) ||
+    !(thread_text.length >= THREAD_MIN_BODY_LENGTH && thread_text.length <= THREAD_MAX_BODY_LENGTH)) {
     res.json({ "error": "length" })
     return;
   }
@@ -735,30 +686,43 @@ app.post("/createnewthread", async function (req, res) {
 });
 app.post("/addcomment", upload.single("file"), async function (req, res) {
 
-  // Checking dict is a body
+  let thread_id = ''
+  let comment_body = ''
+
+  // Validating thread ID and body
   try {
-    check_dict_has(req, "body")
+    thread_id = req.body["thread-id"]
+    comment_body = req.body["comment-body"].trim()
+
+    if (!(comment_body.length >= COMMENT_MIN_LENGTH && comment_body.length <= COMMENT_MAX_LENGTH)) {
+      res.json({ "error": "length" })
+      return
+    }
+    check_valid_id(thread_id);
   }
   catch {
     res.status(400).end();
     return;
   }
 
-  // Opening the ID database and getting the least-recently used ID. 
-  // This is the equivalent of generating a primary key in a database.
-  const id_string = await generate_id_key(comment_id_fp)
 
-  let img_path = '_'
 
 
   try {
+
+
+    // Opening the ID database and getting the least-recently used ID. 
+    // This is the equivalent of generating a primary key in a database.
+
+    const id_string = await generate_id_key(comment_id_fp)
+    let img_path = '_'
 
     if (req["file"] !== undefined) {
       const tempPath = req.file.path;
       const suffix = path.extname(req.file.originalname).toLowerCase()
 
       if (!(suffix === ".png" || suffix === ".jpg" || suffix === '.jpeg')) {
-        res.json({"error":"file"})
+        res.json({ "error": "file" })
         console.log(`${tempPath} - temp path`)
         delete_file(tempPath);
         return;
@@ -774,41 +738,12 @@ app.post("/addcomment", upload.single("file"), async function (req, res) {
       img_path = `./uploads/${id_string}.jpg`
     }
 
-  }
-  catch (e) {
-    console.log("Backend problem - /addcomment")
-    console.log(e)
-    res.status(400).end()
-    return;
-  }
-
-  let thread_id = ''
-  let comment_body = ''
-
-  try {
-    check_dict_has(req.body, "thread-id")
-    check_dict_has(req.body, "comment-body")
-    thread_id = req.body["thread-id"]
-    comment_body = req.body["comment-body"].trim()
-
-    check_type(thread_id, STRING_TYPE)
-    check_type(comment_body, STRING_TYPE)
-
-    check_valid_id(thread_id)
-    check_length(comment_body, COMMENT_MIN_LENGTH, COMMENT_MAX_LENGTH)
-  }
-  catch {
-    res.status(400).end()
-    return;
-  }
+    if (img_path == '_' && comment_body == '') {
+      res.json({ "error": "content" })
+      return
+    }
 
 
-  if (img_path == '_' && comment_body == '') {
-    res.json({"error":"content"})
-    return
-  }
-
-  try {
     // Adding comment to db
     const date_string = datearr_to_string(get_date_arr());
     const likes = 0;
@@ -850,9 +785,9 @@ app.post("/addcomment", upload.single("file"), async function (req, res) {
 
 app.post("/deletethread", async function (req, res) {
   let thread_deletion_id = ''
+
+  // Validation
   try {
-    check_dict_has(req, "body")
-    check_dict_has(req.body, "thread-id")
     thread_deletion_id = req.body["thread-id"]
     check_valid_id(thread_deletion_id);
   }
@@ -895,7 +830,13 @@ app.post("/deletethread", async function (req, res) {
       if (image_src !== '_') {
         const comment_id = commentJsonData.comments[ind]["id"]
         const image_file_path = `./static/uploads/${comment_id}.jpg`
-        delete_file(image_file_path);
+
+        // Attempt to delete commet image, if the fp doesn't exist it will fail, this behaviour is expected
+        const file_exists = await check_file_exists(image_file_path)
+        if (file_exists) {
+          delete_file(image_file_path);
+        }
+
       }
       commentJsonData.comments.splice(ind, 1);
     }
@@ -913,9 +854,9 @@ app.post("/deletethread", async function (req, res) {
 });
 app.post("/deletecomment", async function (req, res) {
   let comment_deletion_id = ''
+
+  // Validation
   try {
-    check_dict_has(req, "body")
-    check_dict_has(req.body, "comment-id")
     comment_deletion_id = req.body["comment-id"]
     check_valid_id(comment_deletion_id);
   }
@@ -960,10 +901,14 @@ app.post("/deletecomment", async function (req, res) {
 
     // Deleting image (if it exists)
     let image_file_path = `./static/uploads/${comment_deletion_id}.jpg`
-    if (check_file_exists(image_file_path)) {
+    // note it can fail
+
+    const file_exists = await check_file_exists(image_file_path)
+
+    if (file_exists) {
       delete_file(image_file_path);
     }
-
+    
 
     res.json({})
     return;
@@ -985,17 +930,14 @@ app.post("/likethread", async function (req, res) {
   let thread_id = ''
   let like_number = 0
 
+
+  // Validation
   try {
-    check_dict_has(req, "body")
-    check_dict_has(req.body, "thread-id")
-    check_dict_has(req.body, "like-number")
     thread_id = req.body["thread-id"]
 
     check_valid_id(thread_id)
 
-    like_number = req.body["like-number"]
-    check_type(like_number, NUMBER_TYPE)
-
+    like_number = parseInt(req.body["like-number"])
   }
   catch {
     res.status(400).end()
@@ -1036,15 +978,9 @@ app.post("/likecomment", async function (req, res) {
   let like_number = 0
 
   try {
-    check_dict_has(req, "body")
-    check_dict_has(req.body, "comment-id")
-    check_dict_has(req.body, "like-number")
     comment_id = req.body["comment-id"]
-
     check_valid_id(comment_id)
-
-    like_number = req.body["like-number"]
-    like_number = parseInt(like_number)
+    like_number = parseInt(req.body["like-number"])
 
   }
   catch {
@@ -1091,21 +1027,18 @@ app.post("/likecomment", async function (req, res) {
 
 
 
-module.exports = {check_type, 
-  check_non_negative,
-  check_dict_has,
-  check_set_has,
-  check_length,
+module.exports = {
+  check_valid_id,
   item_count_to_page_count,
   dict_get,
   int_to_id,
-  get_date_arr,
   check_file_exists,
-  
+
 
   app,
   port,
-  
+
   NUMBER_TYPE,
   STRING_TYPE,
-  UNDEFINED_TYPE};
+  UNDEFINED_TYPE
+};
