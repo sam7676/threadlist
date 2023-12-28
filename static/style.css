@@ -314,6 +314,7 @@ min-width: 401px;
     text-align: left;
     line-height: 20px;
     width: 100%;
+    word-break: break-word;
 }
 
 #submit-new-comment {
