@@ -24,7 +24,6 @@ const COMMENT_UNICODE = '🗨'
 const HIDDEN_CHAR = '⁠&#8288;'
 
 // Converts a one or two-digit number into a two-digit string.
-// No validation needed, as the result comes from the server.
 function make_double_digit(s) {
     if (s == '_') {
         return s;
@@ -35,17 +34,6 @@ function make_double_digit(s) {
     }
     else {
         return t
-    }
-}
-
-// If the string is valid (thread array index != '_'), returns the string
-// Otherwise compacts the HTML table with an empty character
-function return_string_if_valid(str) {
-    if (str == '_') {
-        return HIDDEN_CHAR
-    }
-    else {
-        return str
     }
 }
 
@@ -71,35 +59,52 @@ async function update_form_max() {
 
 // Updates the table with data given
 function update_table(data) {
-    var data_arr = []
-    for (var i in data) {
-        var temp_arr = []
-        for (var j in data[i]) {
+    // Creating array to work through
+    let data_arr = []
+    for (let i in data) {
+        let temp_arr = []
+        for (let j in data[i]) {
             temp_arr.push(data[i][j])
         }
         data_arr.push(temp_arr);
     }
 
-    var table = document.getElementById("thread-table")
+    let table = document.getElementById("thread-table")
+    let rows = table.rows;
 
-    var rows = table.rows;
     for (let i = 1; i < rows.length; i++) {
 
-        rows[i].cells[0].innerHTML = return_string_if_valid(data_arr[i - 1][THREAD_TITLE_INDEX])
-        rows[i].cells[1].innerHTML = data_arr[i - 1][THREAD_ID_INDEX]
-        rows[i].cells[2].innerHTML = return_string_if_valid(date_to_readable(data_arr[i - 1][THREAD_DATES_INDEX]))
-        rows[i].cells[3].innerHTML = return_string_if_valid(date_to_readable(data_arr[i - 1][THREAD_UPDATE_INDEX]))
-        rows[i].cells[4].innerHTML = return_string_if_valid(add_char(HEART_UNICODE, data_arr[i - 1][THREAD_LIKES_INDEX]))
-        rows[i].cells[5].innerHTML = return_string_if_valid(add_char(COMMENT_UNICODE, data_arr[i - 1][THREAD_COMMENTS_INDEX]))
+        // Checking if thread is valid
+        let valid = false;
+        if (data_arr[i-1][THREAD_ID_INDEX] != '_') {
+            valid = true;
+        }
 
+        // If valid, display all as normal
+        if (valid) {
+            rows[i].cells[0].innerHTML = data_arr[i - 1][THREAD_TITLE_INDEX]
+            rows[i].cells[1].innerHTML = data_arr[i - 1][THREAD_ID_INDEX]
+            rows[i].cells[2].innerHTML = date_to_readable(data_arr[i - 1][THREAD_DATES_INDEX])
+            rows[i].cells[3].innerHTML = date_to_readable(data_arr[i - 1][THREAD_UPDATE_INDEX])
+            rows[i].cells[4].innerHTML = add_char(HEART_UNICODE, data_arr[i - 1][THREAD_LIKES_INDEX])
+            rows[i].cells[5].innerHTML = add_char(COMMENT_UNICODE, data_arr[i - 1][THREAD_COMMENTS_INDEX])
+        }
+        // If invalid, display all as invisible
+        else {
+            rows[i].cells[0].innerHTML = HIDDEN_CHAR
+            rows[i].cells[1].innerHTML = '_'
+            rows[i].cells[2].innerHTML = HIDDEN_CHAR
+            rows[i].cells[3].innerHTML = HIDDEN_CHAR
+            rows[i].cells[4].innerHTML = HIDDEN_CHAR
+            rows[i].cells[5].innerHTML = HIDDEN_CHAR
+        }
     }
-
-
 }
 
 // Updates which threads are currently shown to the user
 async function update_thread_display() {
 
+    // Ensuring form page <= max page
     await get_page_count()
     if (form_page > max_page) {
         form_page = max_page;
@@ -110,44 +115,43 @@ async function update_thread_display() {
     let search_item = document.getElementById("search").value
 
     try {
+        // API call
         const promise = await fetch("./threads?" + new URLSearchParams({
             'select': select_value,
             'search': search_item,
             'page': form_page,
         }), { method: "GET" })
+
+        // Updating table and display
         const result_json = await promise.json()
         update_table(result_json)
         update_form_max()
-
     }
     catch {
         alert("Network error: /threads failed to return values")
     }
-
-
-
-
 }
 
 // Gets the number of pages of threads in the application
 async function get_page_count() {
     try {
+        // API call
         const promise = await fetch("./getpagecount", { method: "GET" })
         const json_obj = await promise.json()
+
+        // Updates max page and display
         max_page = json_obj["page_count"]
         document.getElementById("maxpage").innerHTML = max_page;
     }
     catch {
         alert("Network error: /getpagecount failed to return a value")
     }
-
-
 }
 
 // If a thread is clicked on, selects the thread and triggers the view_thread script
 function select_row(row) {
-    var rowID = 'row'.concat(row.toString())
-    var row_element = document.getElementById(rowID)
+    const rowID = 'row'.concat(row.toString())
+    const row_element = document.getElementById(rowID)
     selected_thread = row_element.cells[1].innerHTML;
     if (selected_thread == '_') {
         alert("Cannot select invalid thread")
@@ -163,19 +167,17 @@ function date_to_readable(str) {
         return str;
     }
     let arr = str.split("-")
-    for (let i = 0; i < arr.length; i++) {
-        arr[i] = parseInt(arr[i]);
-    }
-
 
     // YEAR MONTH DAY HOURS MINUTES SECONDS
     //    0     1   2     3       4       5
-    arr[1] = make_double_digit(arr[1])
-    arr[2] = make_double_digit(arr[2])
-    arr[3] = make_double_digit(arr[3])
-    arr[4] = make_double_digit(arr[4])
+    for (let i = 0; i < arr.length; i++) {
+        arr[i] = parseInt(arr[i]);
 
-
+        // Setting a few items to double digit for presentation's sake
+        if (i >= 1 && i <= 4) {
+            arr[i] = make_double_digit(arr[i])
+        }
+    }
     return `${arr[1]}/${arr[2]}/${arr[0]} ${arr[3]}:${arr[4]}`
 }
 
@@ -205,8 +207,6 @@ function view_thread() {
     catch {
         alert("Network error: view-thread.html unable to be fetched")
     }
-
-    
 }
 
 // Clears the extra content frame
