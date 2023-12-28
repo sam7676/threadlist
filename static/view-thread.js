@@ -272,6 +272,9 @@ async function submit_comment() {
         else if (json_obj["error"] == "file") {
             alert("Filetype not supported")
         }
+        else if (json_obj["error"] == "length") {
+            alert("Comment length not in desired range")
+        }
 
         get_last_thread_update()
         await window.parent.update_thread_display()
