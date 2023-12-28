@@ -351,7 +351,6 @@ app.get("/threads", async function (req, res) {
     select = dict_get(req.query, "select", "date-newest");
     search = dict_get(req.query, "search", "");
     page = parseInt(dict_get(req.query, "page", '1'))
-
     if (!thread_select_set.has(select)) {
       throw ""
     }

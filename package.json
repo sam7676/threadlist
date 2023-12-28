@@ -8,9 +8,8 @@
   },
   "devDependencies": {
     "eslint": "^8.56.0"
-  
   },
-    "scripts": {
-      "test": "jest"
+  "scripts": {
+    "test": "jest"
   }
 }
