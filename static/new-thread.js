@@ -13,11 +13,8 @@ async function submit_thread() {
     const thread_title = title_box.value
     const thread_body = body_box.value
 
-    
-
     try {
-
-
+        // API request
         const promise = await fetch("./createnewthread",
             {
                 headers: {
@@ -30,26 +27,26 @@ async function submit_thread() {
                 })
             })
         const json_obj = await promise.json()
-
+        
+        // Error handling from server
         if (json_obj["error"] == "length") {
             alert("Thread title/body length not in range")
+            return
         }
-        else {
-            title_box.value = ''
-            body_box.value = ''
-            const new_thread_id = json_obj["thread-id"]
-            await window.parent.update_thread_display()
-            post_success(new_thread_id)
-        }
+
+        // Updating display
+        title_box.value = ''
+        body_box.value = ''
+        const new_thread_id = json_obj["thread-id"]
+        await window.parent.update_thread_display()
+        post_success(new_thread_id)
     }
     catch {
         alert("Network error: /createnewthread failed to execute")
     }
-
-   
-
 }
 
+// Closes listeners and displays the given thread
 function post_success(thread_id) {
     window.parent.selected_thread = thread_id;
     submit_thread_element.removeEventListener("click", submit_thread, true); // Succeeds
@@ -59,7 +56,6 @@ function post_success(thread_id) {
 
 // Closes the iFrame
 function close_doc() {
-
     submit_thread_element.removeEventListener("click", submit_thread, true); // Succeeds
     close_element.removeEventListener("click", close_doc, true);
     window.parent.close_frame()
