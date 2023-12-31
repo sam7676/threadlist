@@ -1,62 +1,63 @@
-const submit_thread_element = document.getElementById("new-thread-submit")
-const close_element = document.getElementById("new-thread-close")
+/* global alert */
+
+const submitThreadElement = document.getElementById('new-thread-submit');
+const closeElement = document.getElementById('new-thread-close');
 
 // Button listeners
-submit_thread_element.addEventListener("click", submit_thread);
-close_element.addEventListener("click", close_doc);
+submitThreadElement.addEventListener('click', submitThread);
+closeElement.addEventListener('click', closeDoc);
 
 // POST request to send a new thread to the server
-async function submit_thread() {
-    const title_box = document.getElementById("new-thread-title-box")
-    const body_box = document.getElementById("new-thread-body-box")
+async function submitThread () {
+    const titleBox = document.getElementById('new-thread-title-box');
+    const bodyBox = document.getElementById('new-thread-body-box');
 
-    const thread_title = title_box.value
-    const thread_body = body_box.value
+    const threadTitle = titleBox.value;
+    const threadBody = bodyBox.value;
 
     try {
         // API request
-        const promise = await fetch("./createnewthread",
+        const promise = await fetch('./createnewthread',
             {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                method: "POST",
+                method: 'POST',
                 body: JSON.stringify({
-                    "title": thread_title,
-                    "body": thread_body
+                    title: threadTitle,
+                    body: threadBody
                 })
-            })
-        const json_obj = await promise.json()
-        
+            });
+        const jsonObj = await promise.json();
+
         // Error handling from server
-        if (json_obj["error"] == "length") {
-            alert("Thread title/body length not in range")
-            return
+        if (jsonObj.error === 'length') {
+            alert('Thread title/body length not in range');
+            return;
         }
 
         // Updating display
-        title_box.value = ''
-        body_box.value = ''
-        const new_thread_id = json_obj["thread-id"]
-        await window.parent.update_thread_display()
-        post_success(new_thread_id)
-    }
-    catch {
-        alert("Network error: /createnewthread failed to execute")
+        titleBox.value = '';
+        bodyBox.value = '';
+        const newThreadId = jsonObj['thread-id'];
+        await window.parent.update_thread_display();
+        postSuccess(newThreadId);
+    } catch {
+        alert('Network error: /createnewthread failed to execute');
     }
 }
 
 // Closes listeners and displays the given thread
-function post_success(thread_id) {
-    window.parent.selected_thread = thread_id;
-    submit_thread_element.removeEventListener("click", submit_thread, true); // Succeeds
-    close_element.removeEventListener("click", close_doc, true);
-    window.parent.view_thread();
+function postSuccess (threadId) {
+    window.parent.selected_thread = threadId;
+    submitThreadElement.removeEventListener('click', submitThread, true); // Succeeds
+    closeElement.removeEventListener('click', closeDoc, true);
+    window.parent.viewThread();
 }
 
 // Closes the iFrame
-function close_doc() {
-    submit_thread_element.removeEventListener("click", submit_thread, true); // Succeeds
-    close_element.removeEventListener("click", close_doc, true);
-    window.parent.close_frame()
+function closeDoc () {
+    submitThreadElement.removeEventListener('click', submitThread, true); // Succeeds
+    closeElement.removeEventListener('click', closeDoc, true);
+    window.parent.closeFrame();
 }
