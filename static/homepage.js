@@ -1,9 +1,9 @@
 /* global alert */
 
 // Initialising the page and adding listeners
-let formPage = 1;
-let maxPage = 1;
-let selectedThread = null;
+var formPage = 1;
+var maxPage = 1;
+var selectedThread = null;
 const frame = document.getElementById('extra-content');
 
 updateFormMax();
@@ -135,7 +135,7 @@ async function getPageCount () {
         const jsonObj = await promise.json();
 
         // Updates max page and display
-        maxPage = jsonObj.page_count;
+        maxPage = jsonObj.pageCount;
         document.getElementById('maxpage').innerHTML = maxPage;
     } catch {
         alert('Network error: /getpagecount failed to return a value');

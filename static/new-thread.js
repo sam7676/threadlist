@@ -40,7 +40,8 @@ async function submitThread () {
         titleBox.value = '';
         bodyBox.value = '';
         const newThreadId = jsonObj['thread-id'];
-        await window.parent.update_thread_display();
+        console.log(newThreadId)
+        await window.parent.updateThreadDisplay();
         postSuccess(newThreadId);
     } catch {
         alert('Network error: /createnewthread failed to execute');
@@ -49,7 +50,7 @@ async function submitThread () {
 
 // Closes listeners and displays the given thread
 function postSuccess (threadId) {
-    window.parent.selected_thread = threadId;
+    window.parent.selectedThread = threadId;
     submitThreadElement.removeEventListener('click', submitThread, true); // Succeeds
     closeElement.removeEventListener('click', closeDoc, true);
     window.parent.viewThread();

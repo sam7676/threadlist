@@ -198,6 +198,7 @@ Debug measures */
     height: 200px;
     display: inline-block;
     text-align: start;
+    word-break: break-word;
 
 }
 

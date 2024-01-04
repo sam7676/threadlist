@@ -1,6 +1,9 @@
 /* global alert */
 
-const threadId = window.parent.selected_thread;
+const threadId = window.parent.selectedThread;
+var formCommentPage = 1;
+var maxCommentPage = 1;
+var threadLikes = 0;
 
 const elementClose = document.getElementById('view-thread-close');
 const elementDeleteThreadButton = document.getElementById('delete-thread');
@@ -11,9 +14,6 @@ const elementBackCommentPage = document.getElementById('back-comment-page');
 const elementNextCommentPage = document.getElementById('next-comment-page');
 const elementSubmitCommentButton = document.getElementById('submit-comment');
 
-let formCommentPage = 1;
-let maxCommentPage = 1;
-
 elementClose.addEventListener('click', closeDoc);
 elementDeleteThreadButton.addEventListener('click', deleteThread);
 elementLikeThreadButton.addEventListener('click', likeThread);
@@ -22,8 +22,6 @@ elementGetComments.addEventListener('click', updateCommentDisplay);
 elementBackCommentPage.addEventListener('click', decrementFormCommentPage);
 elementNextCommentPage.addEventListener('click', incrementFormCommentPage);
 elementSubmitCommentButton.addEventListener('click', submitComment);
-
-let threadLikes = 0;
 
 const COMMENT_BODY_INDEX = 1;
 const COMMENT_ID_INDEX = 0;
@@ -49,8 +47,8 @@ async function getThreadInfo () {
         // Updating elements in HTML file
         document.getElementById('view-thread-title').innerHTML = result.title;
         document.getElementById('view-thread-body').innerHTML = result.body;
-        document.getElementById('thread-date').innerHTML = window.parent.date_to_readable(result.date);
-        document.getElementById('thread-last-update').innerHTML = window.parent.date_to_readable(result.lastupdate);
+        document.getElementById('thread-date').innerHTML = window.parent.dateToReadable(result.date);
+        document.getElementById('thread-last-update').innerHTML = window.parent.dateToReadable(result.lastupdate);
         document.getElementById('thread-likes').innerHTML = threadLikes;
     } catch {
         alert('Network error: /threadinfo failed to execute');
@@ -72,7 +70,7 @@ async function deleteThread () {
                 })
             });
         // Request complete, update HTML display
-        await window.parent.update_thread_display();
+        await window.parent.updateThreadDisplay();
         closeDoc();
     } catch {
         alert('Network error: /deletethread failed to execute');
@@ -114,7 +112,7 @@ async function updateThreadLikes (val) {
             });
 
         // API success, updating display
-        window.parent.update_thread_display();
+        window.parent.updateThreadDisplay();
         return true;
     } catch {
         alert('Network error: /likethread failed to execute');
@@ -165,7 +163,7 @@ function updateCommentTable (data) {
         // Modifying HTML
         bodyElement.innerHTML = dataArr[i][COMMENT_BODY_INDEX];
         idElement.innerHTML = dataArr[i][COMMENT_ID_INDEX];
-        dateElement.innerHTML = window.parent.date_to_readable(dataArr[i][COMMENT_DATE_INDEX]);
+        dateElement.innerHTML = window.parent.dateToReadable(dataArr[i][COMMENT_DATE_INDEX]);
         likesElement.innerHTML = dataArr[i][COMMENT_LIKES_INDEX];
 
         // Displaying image is valid
@@ -230,7 +228,7 @@ async function getCommentCount () {
 
         // Updating max page
         const jsonObj = await promise.json();
-        maxCommentPage = jsonObj.page_count;
+        maxCommentPage = jsonObj.pageCount;
         document.getElementById('max-comment-page').innerHTML = maxCommentPage;
     } catch {
         alert('Network error: /getcommentcount failed to execute');
@@ -268,7 +266,7 @@ async function submitComment () {
 
         // Updating display
         getLastThreadUpdate();
-        await window.parent.update_thread_display();
+        await window.parent.updateThreadDisplay();
         await updateCommentDisplay();
     } catch {
         alert('Network error: /addcomment failed to execute');
@@ -306,7 +304,7 @@ async function deleteCommentCheck (pos) {
 
     // Deletes comment and updates display
     await deleteComment(commentId);
-    await window.parent.update_thread_display();
+    await window.parent.updateThreadDisplay();
     await updateCommentDisplay();
 }
 
@@ -359,7 +357,7 @@ async function getLastThreadUpdate () {
 
         // Updates display
         const jsonObj = await promise.json();
-        document.getElementById('thread-last-update').innerHTML = window.parent.date_to_readable(jsonObj.last_update);
+        document.getElementById('thread-last-update').innerHTML = window.parent.dateToReadable(jsonObj.lastUpdate);
     } catch {
         alert('Network error: /getlastupdate failed to return values');
     }

@@ -7,7 +7,7 @@ const multer = require('multer');
 const sharp = require('sharp');
 
 const app = express();
-const port = 8008;
+const port = 8800;
 
 const dateMap = {
   Jan: 1,
@@ -27,17 +27,17 @@ const upload = multer({ dest: 'static/uploads/' });
 
 // Filepaths for JSON databases
 const threadDbFp = 'db\\thread_db.json';
-const threadIdFp = 'db\\threadId.json';
+const threadIdFp = 'db\\thread_id.json';
 const commentDbFp = 'db\\comment_db.json';
-const commentIdFp = 'db\\commentId.json';
+const commentIdFp = 'db\\comment_id.json';
 
 const ID_KEY_LENGTH = 8;
 const THREAD_MIN_TITLE_LENGTH = 1;
 const THREAD_MAX_TITLE_LENGTH = 100;
 const THREAD_MIN_BODY_LENGTH = 0;
-const THREAD_MAX_BODY_LENGTH = 4000;
+const THREAD_MAX_BODY_LENGTH = 600;
 const COMMENT_MIN_LENGTH = 0;
-const COMMENT_MAX_LENGTH = 4000;
+const COMMENT_MAX_LENGTH = 600;
 
 // Array indices. To do with how data is encoded.
 const THREAD_LIKES_INDEX = 5;
@@ -47,6 +47,9 @@ const THREAD_UPDATE_INDEX = 4;
 const COMMENT_LIKES_INDEX = 3;
 const COMMENT_DATES_INDEX = 2;
 const COMMENT_IMAGE_INDEX = 5;
+
+const MIN_IMAGE_WIDTH = 50;
+const MAX_IMAGE_WIDTH = 300;
 
 // Important variable types
 const STRING_TYPE = 'string';
@@ -251,13 +254,13 @@ async function resizeImage (oldPath, newPath) {
   let width = metadata.width;
   let height = metadata.height;
 
-  if (width > 400) {
-    const ratio = width / 400;
-    width = 400;
+  if (width > MAX_IMAGE_WIDTH) {
+    const ratio = width / MAX_IMAGE_WIDTH;
+    width = MAX_IMAGE_WIDTH;
     height = Math.ceil(height / ratio);
-  } else if (width < 100) {
-    const ratio = width / 100;
-    width = 100;
+  } else if (width < MIN_IMAGE_WIDTH) {
+    const ratio = width / MIN_IMAGE_WIDTH;
+    width = MIN_IMAGE_WIDTH;
     height = Math.ceil(height / ratio);
   }
 
@@ -315,7 +318,7 @@ app.get('/getcommentcount', async function (req, res) {
     }
 
     const pageCount = itemCountToPageCount(commentCount);
-    res.send({ commentCount, pageCount });
+    res.send({"commentCount":commentCount,"pageCount":pageCount});
   } catch (e) {
     console.log('Backend problem - /getcommentcount');
     console.log(e);
@@ -500,7 +503,7 @@ app.get('/getlastupdate', async function (req, res) {
     // Iterating all threads, finding thread with ID matching get request parameter, returning its lastupdate value
     for (let i = 0; i < threadArr.length; i++) {
       if (threadArr[i].id === threadId) {
-        res.json({ last_update: threadArr[i].lastupdate });
+        res.json({ lastUpdate: threadArr[i].lastupdate });
         return;
       }
     }
