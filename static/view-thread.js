@@ -228,7 +228,7 @@ async function getCommentCount () {
 
         // Updating max page
         const jsonObj = await promise.json();
-        maxCommentPage = jsonObj.pageCount;
+        maxCommentPage = jsonObj['page-count'];
         document.getElementById('max-comment-page').innerHTML = maxCommentPage;
     } catch {
         alert('Network error: /getcommentcount failed to execute');

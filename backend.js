@@ -318,7 +318,10 @@ app.get('/getcommentcount', async function (req, res) {
     }
 
     const pageCount = itemCountToPageCount(commentCount);
-    res.send({"commentCount":commentCount,"pageCount":pageCount});
+    res.send({
+      'comment-count': commentCount,
+      'page-count': pageCount
+    });
   } catch (e) {
     console.log('Backend problem - /getcommentcount');
     console.log(e);

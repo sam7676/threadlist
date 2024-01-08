@@ -40,7 +40,6 @@ async function submitThread () {
         titleBox.value = '';
         bodyBox.value = '';
         const newThreadId = jsonObj['thread-id'];
-        console.log(newThreadId)
         await window.parent.updateThreadDisplay();
         postSuccess(newThreadId);
     } catch {
