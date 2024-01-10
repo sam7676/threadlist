@@ -59,7 +59,7 @@ test('GET /pagecount succeeds', () => {
 
 test('GET /commentcount succeeds', () => {
   return request(app)
-    .get('/getcommentcount?thread-id=00000004')
+    .get('/getcommentcount?thread-id=00000001')
     .expect(200)
     .expect('Content-type', /json/);
 });
@@ -113,13 +113,13 @@ test('GET /comments fails with no parameters', () => {
 
 test('GET /threadinfo succeeds', () => {
   return request(app)
-    .get('/threadinfo?id=00000103')
+    .get('/threadinfo?id=00000001')
     .expect(200)
     .expect('Content-type', /json/);
 });
 test('GET /threadinfo fails when thread not found', () => {
   return request(app)
-    .get('/threadinfo?id=00000001')
+    .get('/threadinfo?id=99999999')
     .expect(400)
 });
 test('GET /threadinfo fails with invalid thread ID', () => {
@@ -135,13 +135,13 @@ test('GET /threadinfo fails with no parameters', () => {
 
 test('GET /getlastupdate succeeds', () => {
   return request(app)
-    .get('/getlastupdate?thread-id=00000103')
+    .get('/getlastupdate?thread-id=00000001')
     .expect(200)
     .expect('Content-type', /json/);
 });
 test('GET /getlastupdate fails when thread not found', () => {
   return request(app)
-    .get('/getlastupdate?thread-id=00000001')
+    .get('/getlastupdate?thread-id=99999999')
     .expect(400)
 });
 test('GET /getlastupdate fails with invalid thread ID', () => {
@@ -197,7 +197,7 @@ test('POST /addcomment fails with no parameters', () => {
 });
 
 test('POST /likethread succeeds', () => {
-  const params = { "thread-id": '00000103', 'like-number': 1};
+  const params = { "thread-id": '00000001', 'like-number': 1};
   return request(app)
   .post('/likethread')
   .send(params)
