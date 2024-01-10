@@ -8,8 +8,6 @@ Debug measures */
     border: 2px black solid;
 } */
 
-
-
 /* Useful class styles */
 @media (max-width: 850px) {
     .div-centre {
@@ -335,5 +333,5 @@ min-width: 401px;
 #extra-content {
     border: 0;
     width: 100%;
-    height: 1000px;
+    height: 3500px;
 }
