@@ -286,7 +286,9 @@ app.get('/getpagecount', async function (req, res) {
     let pageCount = 0;
     const files = await openJsonFile(threadDbFp);
     pageCount = itemCountToPageCount(files.threads.length);
-    res.send({ pageCount });
+    res.send({
+      'page-count': pageCount
+    });
   } catch (e) {
     console.log('Backend problem - /getpagecount');
     console.log(e);
