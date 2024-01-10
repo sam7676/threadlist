@@ -13,6 +13,7 @@
   },
   "scripts": {
     "pretest": "eslint backend.js static/homepage.js static/new-thread.js static/view-thread.js",
-    "test": "jest"
+    "test": "jest",
+    "start": "node main.js"
   }
 }
