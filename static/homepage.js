@@ -135,7 +135,7 @@ async function getPageCount () {
         const jsonObj = await promise.json();
 
         // Updates max page and display
-        maxPage = jsonObj.pageCount;
+        maxPage = jsonObj['page-count'];
         document.getElementById('maxpage').innerHTML = maxPage;
     } catch {
         alert('Network error: /getpagecount failed to return a value');
