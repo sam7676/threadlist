@@ -1,1 +1,49 @@
-{"threads":[{"id":"00000090","title":"adding thread here!","body":"Hello","date":"2023-12-28-20-53-42","lastupdate":"2024-01-04-04-40-01","likes":-17,"comments":3},{"id":"00000091","title":"THREAD WITH A SHORT TITLE","body":"THREAD WITH A VERY LONG BODYTHREAD WITH A VERY LONG BODYTHREAD WITH A VERY LONG BODYTHREAD WITH A VERY LONG BODYTHREAD WITH A VERY LONG BODYTHREAD WITH A VERY LONG BODYTHREAD WITH A VERY LONG BODYTHREAD WITH A VERY LONG BODYTHREAD WITH A VERY LONG BODYTHREAD WITH A VERY LONG BODYTHREAD WITH A VERY LONG BODYTHREAD WITH A VERY LONG BODYTHREAD WITH A VERY LONG BODY","date":"2023-12-28-20-58-24","lastupdate":"2024-01-08-16-18-59","likes":0,"comments":5},{"id":"00000095","title":"new thread","body":"fixed again!","date":"2024-01-04-04-27-09","lastupdate":"2024-01-04-04-27-09","likes":0,"comments":0},{"id":"00000099","title":"b","body":"","date":"2024-01-04-04-29-29","lastupdate":"2024-01-04-04-32-12","likes":0,"comments":6},{"id":"00000103","title":"new thread","body":"body","date":"2024-01-08-10-00-57","lastupdate":"2024-01-08-16-11-50","likes":null,"comments":1},{"id":"00000104","title":"title","body":"text","date":"2024-01-10-22-45-01","lastupdate":"2024-01-10-22-45-01","likes":0,"comments":0},{"id":"00000105","title":"title","body":"text","date":"2024-01-10-22-45-40","lastupdate":"2024-01-10-22-45-40","likes":0,"comments":0},{"id":"00000106","title":"title","body":"text","date":"2024-01-10-22-47-17","lastupdate":"2024-01-10-22-47-17","likes":0,"comments":0},{"id":"00000107","title":"title","body":"text","date":"2024-01-10-22-49-37","lastupdate":"2024-01-10-22-49-37","likes":0,"comments":0},{"id":"00000108","title":"title","body":"text","date":"2024-01-10-22-50-56","lastupdate":"2024-01-10-22-50-56","likes":0,"comments":0},{"id":"00000109","title":"title","body":"text","date":"2024-01-10-22-51-55","lastupdate":"2024-01-10-22-51-55","likes":0,"comments":0},{"id":"00000110","title":"title","body":"text","date":"2024-01-10-22-52-41","lastupdate":"2024-01-10-22-52-41","likes":0,"comments":0}]}
+{
+    "threads": [
+        {
+            "id": "00000090",
+            "title": "adding thread here!",
+            "body": "Hello",
+            "date": "2023-12-28-20-53-42",
+            "lastupdate": "2024-01-04-04-40-01",
+            "likes": -17,
+            "comments": 3
+        },
+        {
+            "id": "00000091",
+            "title": "THREAD WITH A SHORT TITLE",
+            "body": "THREAD WITH A VERY LONG BODYTHREAD WITH A VERY LONG BODYTHREAD WITH A VERY LONG BODYTHREAD WITH A VERY LONG BODYTHREAD WITH A VERY LONG BODYTHREAD WITH A VERY LONG BODYTHREAD WITH A VERY LONG BODYTHREAD WITH A VERY LONG BODYTHREAD WITH A VERY LONG BODYTHREAD WITH A VERY LONG BODYTHREAD WITH A VERY LONG BODYTHREAD WITH A VERY LONG BODYTHREAD WITH A VERY LONG BODY",
+            "date": "2023-12-28-20-58-24",
+            "lastupdate": "2024-01-08-16-18-59",
+            "likes": 0,
+            "comments": 5
+        },
+        {
+            "id": "00000095",
+            "title": "new thread",
+            "body": "fixed again!",
+            "date": "2024-01-04-04-27-09",
+            "lastupdate": "2024-01-04-04-27-09",
+            "likes": 0,
+            "comments": 0
+        },
+        {
+            "id": "00000099",
+            "title": "b",
+            "body": "",
+            "date": "2024-01-04-04-29-29",
+            "lastupdate": "2024-01-04-04-32-12",
+            "likes": 0,
+            "comments": 6
+        },
+        {
+            "id": "00000103",
+            "title": "new thread",
+            "body": "body",
+            "date": "2024-01-08-10-00-57",
+            "lastupdate": "2024-01-08-16-11-50",
+            "likes": 0,
+            "comments": 1
+        }
+    ]
+}
