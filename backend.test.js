@@ -197,7 +197,7 @@ test('POST /addcomment fails with no parameters', () => {
 });
 
 test('POST /likethread succeeds', () => {
-  const params = { "thread-id": '00000103'};
+  const params = { "thread-id": '00000103', 'like-number': 1};
   return request(app)
   .post('/likethread')
   .send(params)
@@ -219,7 +219,7 @@ test('POST /likethread fails with no parameters', () => {
 });
 
 test('POST /likecomment succeeds', () => {
-  const params = { "comment-id": '00000164'};
+  const params = { "comment-id": '00000164', "like-number": 1};
   return request(app)
   .post('/likecomment')
   .send(params)
