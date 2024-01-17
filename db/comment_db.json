@@ -4,9 +4,17 @@
             "id": "00000001",
             "body": "Here is an example of a comment.",
             "date": "2024-01-10-23-34-01",
-            "likes": -1,
+            "likes": 0,
             "parent": "00000001",
             "image": "./uploads/00000001.jpg"
+        },
+        {
+            "id": "00000002",
+            "body": "body",
+            "date": "2024-01-17-01-56-41",
+            "likes": 0,
+            "parent": "00000001",
+            "image": "_"
         }
     ]
 }
