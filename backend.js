@@ -623,7 +623,11 @@ app.post('/addcomment', upload.single('file'), async function (req, res) {
       const targetPath = path.join(__dirname, `./static/uploads/${idString}.jpg`);
       await fspromise.rename(tempPath, newTempPath);
       await resizeImage(newTempPath, targetPath);
-      fspromise.unlink(newTempPath);
+
+      // Attempt to delete old file; if this doesn't work forget about it
+      try {
+        await fspromise.unlink(newTempPath);
+      } catch {}
 
       imgPath = `./uploads/${idString}.jpg`;
     }
